@@ -13,7 +13,7 @@ const Canvas3D = () => {
 
   const rendererProps = useControls("Renderer", {
     outputColorSpace: {
-      value: THREE.SRGBColorSpace,
+      value: THREE.LinearSRGBColorSpace,
       options: {
         LinearSRGB: THREE.LinearSRGBColorSpace,
         SRGB: THREE.SRGBColorSpace,
@@ -32,7 +32,7 @@ const Canvas3D = () => {
       },
     },
     toneMappingExposure: {
-      value: 0.7,
+      value: 1,
       min: 0,
       max: 3,
       step: 0.01,
