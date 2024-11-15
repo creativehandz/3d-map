@@ -1,13 +1,24 @@
-import vs from "src/assets/shaders/vs.glsl?raw";
-import fs from "src/assets/shaders/fs.glsl?raw";
+import { LoaderContext } from "src/contexts/LoaderContext.jsx";
+import { useContext } from "react";
 
 const Scene = () => {
+  const { getNode } = useContext(LoaderContext);
+
   return (
     <>
-      <mesh>
-        <planeGeometry args={[2, 2]} />
-        <shaderMaterial vertexShader={vs} fragmentShader={fs} />
+      <mesh geometry={getNode("model", "_00Buildings").geometry}>
+        <meshNormalMaterial flatShading />
       </mesh>
+
+      <mesh geometry={getNode("model", "_01Buildings").geometry}>
+        <meshNormalMaterial flatShading />
+      </mesh>
+
+      <mesh geometry={getNode("model", "_02Buildings").geometry}>
+        <meshNormalMaterial flatShading />
+      </mesh>
+
+      <axesHelper args={[1000]} />
     </>
   );
 };

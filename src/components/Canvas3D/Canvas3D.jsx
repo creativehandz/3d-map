@@ -16,8 +16,8 @@ const Canvas3D = () => {
       value: THREE.SRGBColorSpace,
       options: {
         LinearSRGB: THREE.LinearSRGBColorSpace,
-        SRGB: THREE.SRGBColorSpace
-      }
+        SRGB: THREE.SRGBColorSpace,
+      },
     },
     toneMapping: {
       value: THREE.NeutralToneMapping,
@@ -28,15 +28,15 @@ const Canvas3D = () => {
         CineonToneMapping: THREE.CineonToneMapping,
         ACESFilmicToneMapping: THREE.ACESFilmicToneMapping,
         AgXToneMapping: THREE.AgXToneMapping,
-        NeutralToneMapping: THREE.NeutralToneMapping
-      }
+        NeutralToneMapping: THREE.NeutralToneMapping,
+      },
     },
     toneMappingExposure: {
       value: 0.7,
       min: 0,
       max: 3,
-      step: 0.01
-    }
+      step: 0.01,
+    },
   });
 
   return (
@@ -47,8 +47,8 @@ const Canvas3D = () => {
             ...rendererProps,
           }}
           camera={{
-            position: [0, 0, 3],
-            far: 1000
+            position: [0, 400, -600],
+            far: 100000,
           }}
         >
           <Settings />
