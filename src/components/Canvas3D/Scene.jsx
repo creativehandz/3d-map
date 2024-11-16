@@ -35,6 +35,10 @@ const Scene = () => {
         <meshPhongMaterial color={0xafbff} flatShading side={THREE.DoubleSide} />
       </mesh>
 
+      <mesh geometry={getNode("model", "_00GreenMed").geometry}>
+        <meshPhongMaterial color={0xddffdd} flatShading side={THREE.DoubleSide} />
+      </mesh>
+
       <directionalLight position={[1, 1, 1]} />
       <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
       <ambientLight intensity={0.4} />
