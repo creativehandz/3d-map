@@ -1,46 +1,6 @@
-const normalBuffer = new THREE.WebGLRenderTarget(width, height)
-
-normalBuffer.texture.format = THREE.RGBAFormat
-normalBuffer.texture.type = THREE.HalfFloatType
-normalBuffer.texture.minFilter = THREE.NearestFilter
-normalBuffer.texture.magFilter = THREE.NearestFilter
-normalBuffer.texture.generateMipmaps = false
-normalBuffer.stencilBuffer = false
-this.normalBuffer = normalBuffer
-
-this.normalMaterial = new THREE.MeshNormalMaterial()
-
-renderer.setRenderTarget(this.normalBuffer)
-const overrideMaterialValue = this.scene.overrideMaterial
-
-this.scene.overrideMaterial = this.normalMaterial
-renderer.render(this.scene, this.camera)
-this.scene.overrideMaterial = overrideMaterialValue
-
-this.material.uniforms.uNormals.value = this.normalBuffer.texture
-this.material.uniforms.tDiffuse.value = readBuffer.texture
-
-float normalValue(int x, int y) {
-    return valueAtPoint(uNormals, vUv, vec2(1.0 / uResolution.x, 1.0 / uResolution.y), vec2(x, y)) * 0.3;
-}
-
-float getValue(int x, int y) {
-    return diffuseValue(x, y) + normalValue(x, y);
-}
-
-void main() {
-    float sobelValue = combinedSobelValue();
-    sobelValue = smoothstep(0.01, 0.03, sobelValue);
-
-    vec4 lineColor = vec4(0.32, 0.12, 0.2, 1.0);
-
-    if (sobelValue > 0.1) {
-        gl_FragColor = lineColor;
-    } else {
-        gl_FragColor = vec4(1.0);
-    }
-}
-
+uniform float uSobelThreshold;
+uniform float uSobelMin;
+uniform float uSobelMax;
 
 float valueAtPoint(sampler2D image, vec2 coord, vec2 texel, vec2 point) {
     vec3 luma = vec3(0.299, 0.587, 0.114);
@@ -49,7 +9,7 @@ float valueAtPoint(sampler2D image, vec2 coord, vec2 texel, vec2 point) {
 }
 
 float diffuseValue(int x, int y) {
-    return valueAtPoint(tDiffuse, vUv, vec2(1.0 / uResolution.x, 1.0 / uResolution.y), vec2(x, y)) * 0.6;
+    return valueAtPoint(inputBuffer, vUv, vec2(1.0 / resolution.x, 1.0 / resolution.y), vec2(x, y)) * 0.6;
 }
 
 float getValue(int x, int y) {
@@ -91,4 +51,22 @@ float combinedSobelValue() {
     // magnitude of the total gradient
     float G = (valueGx * valueGx) + (valueGy * valueGy);
     return clamp(G, 0.0, 1.0);
+}
+
+void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+  vec4 color = inputColor;
+
+
+  float sobelValue = combinedSobelValue();
+  sobelValue = smoothstep(uSobelMin, uSobelMax, sobelValue);
+
+  vec4 lineColor = vec4(0.32, 0.12, 0.2, 1.0);
+
+  if (sobelValue > uSobelThreshold) {
+      color = lineColor;
+  } else {
+      color = vec4(1.0, 0.95, 0.85, 1.0);
+  }
+
+  outputColor = color;
 }

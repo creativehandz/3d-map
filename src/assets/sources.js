@@ -2,19 +2,17 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { TextureLoader, CubeTextureLoader } from "three";
 
 const sources = [
-  // {
-  //   type: "gltf",
-  //   loader: GLTFLoader,
-  //   paths: ["./model.glb"],
-  // },
+  {
+    type: "gltf",
+    loader: GLTFLoader,
+    paths: ["./model.glb"],
+  },
 
-  // {
-  //   type: "texture",
-  //   loader: TextureLoader,
-  //   paths: [
-  //     "./_Baked1.jpg",
-  //   ],
-  // },
+  {
+    type: "texture",
+    loader: TextureLoader,
+    paths: ["./map.jpg"],
+  },
 
   // {
   //   type: "cubemap",
