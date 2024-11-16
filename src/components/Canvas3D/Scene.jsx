@@ -3,10 +3,14 @@ import * as THREE from "three";
 import { useContext } from "react";
 
 const Scene = () => {
-  const { getNode } = useContext(LoaderContext);
+  const { getNode, getTexture } = useContext(LoaderContext);
 
   return (
     <>
+      <mesh geometry={getNode("model", "_00Base").geometry}>
+        <meshBasicMaterial transparent opacity={0.9} map={getTexture("map")} />
+      </mesh>
+
       <mesh geometry={getNode("model", "_00Buildings").geometry}>
         <meshPhongMaterial flatShading />
       </mesh>
@@ -39,9 +43,9 @@ const Scene = () => {
         <meshPhongMaterial color={0xddffdd} flatShading side={THREE.DoubleSide} />
       </mesh>
 
-      <directionalLight position={[1, 1, 1]} />
+      <directionalLight position={[1, 1, 1]} intensity={1.2} />
       <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={1.4} />
 
       <axesHelper args={[1000]} />
     </>

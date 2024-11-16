@@ -47,8 +47,9 @@ const Canvas3D = () => {
             ...rendererProps,
           }}
           camera={{
-            position: [0, 400, -600],
+            position: [-300, 700, 200],
             far: 100000,
+            near: 2,
           }}
         >
           <Settings />

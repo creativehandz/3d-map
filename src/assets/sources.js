@@ -8,13 +8,11 @@ const sources = [
     paths: ["./model.glb"],
   },
 
-  // {
-  //   type: "texture",
-  //   loader: TextureLoader,
-  //   paths: [
-  //     "./_Baked1.jpg",
-  //   ],
-  // },
+  {
+    type: "texture",
+    loader: TextureLoader,
+    paths: ["./map.jpg"],
+  },
 
   // {
   //   type: "cubemap",
