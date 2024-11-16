@@ -1,4 +1,5 @@
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
+import * as THREE from "three";
 import { useContext } from "react";
 
 const Scene = () => {
@@ -23,7 +24,15 @@ const Scene = () => {
       </mesh>
 
       <mesh geometry={getNode("model", "_00Roads").geometry}>
-        <meshPhongMaterial color={0xcdcdcd} flatShading />
+        <meshPhongMaterial color={0xcdcdcd} flatShading side={THREE.DoubleSide} />
+      </mesh>
+
+      <mesh geometry={getNode("model", "_00HardSurface").geometry}>
+        <meshPhongMaterial color={0xc0c0c0} flatShading side={THREE.DoubleSide} />
+      </mesh>
+
+      <mesh geometry={getNode("model", "_00Water").geometry}>
+        <meshPhongMaterial color={0xafbff} flatShading side={THREE.DoubleSide} />
       </mesh>
 
       <directionalLight position={[1, 1, 1]} />
