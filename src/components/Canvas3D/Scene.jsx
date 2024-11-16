@@ -8,7 +8,7 @@ const Scene = () => {
   return (
     <>
       <mesh geometry={getNode("model", "_00Base").geometry}>
-        <meshBasicMaterial transparent opacity={0.9} map={getTexture("map")} />
+        <meshBasicMaterial map={getTexture("map")} />
       </mesh>
 
       <mesh geometry={getNode("model", "_00Buildings").geometry}>
@@ -39,15 +39,15 @@ const Scene = () => {
         <meshPhongMaterial color={0xafbff} flatShading side={THREE.DoubleSide} />
       </mesh>
 
-      <mesh geometry={getNode("model", "_00GreenMed").geometry}>
+      {/* <mesh geometry={getNode("model", "_00GreenMed").geometry}>
         <meshPhongMaterial color={0xddffdd} flatShading side={THREE.DoubleSide} />
-      </mesh>
+      </mesh> */}
 
       <directionalLight position={[1, 1, 1]} intensity={1.2} />
       <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
       <ambientLight intensity={1.4} />
 
-      <axesHelper args={[1000]} />
+      {/* <axesHelper args={[1000]} /> */}
     </>
   );
 };
