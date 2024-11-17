@@ -5,7 +5,7 @@ const sources = [
   {
     type: "gltf",
     loader: GLTFLoader,
-    paths: ["./model.glb"],
+    paths: ["./model.glb", "./areas.glb"],
   },
 
   {
