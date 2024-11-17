@@ -11,7 +11,7 @@ const sources = [
   {
     type: "texture",
     loader: TextureLoader,
-    paths: ["./map.jpg"],
+    paths: ["./map.jpg", "./noise.png"],
   },
 
   // {
