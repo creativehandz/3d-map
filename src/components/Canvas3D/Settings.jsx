@@ -13,7 +13,7 @@ const Settings = () => {
     <>
       {mode == "DEV" && <Perf position="top-left" />}
 
-      <OrbitControls />
+      <OrbitControls makeDefault />
     </>
   );
 };

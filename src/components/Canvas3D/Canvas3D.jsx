@@ -45,7 +45,7 @@ const Canvas3D = () => {
         <Canvas
           gl={{
             ...rendererProps,
-            antialias: false,
+            // antialias: false,
           }}
           camera={{
             position: [-300, 700, 200],

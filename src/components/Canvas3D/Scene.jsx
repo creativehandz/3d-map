@@ -1,7 +1,7 @@
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import * as THREE from "three";
 import { useContext } from "react";
-import Areas from "./Areas.jsx";
+import Zones from "./Zones.jsx";
 
 const Scene = () => {
   const { getNode, getTexture } = useContext(LoaderContext);
@@ -50,7 +50,7 @@ const Scene = () => {
 
       {/* <axesHelper args={[1000]} /> */}
 
-      <Areas />
+      <Zones />
     </>
   );
 };
