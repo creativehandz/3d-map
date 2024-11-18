@@ -29,10 +29,6 @@ const CameraControls = ({ zone }) => {
       params.cameraPosition
     );
 
-    window.addEventListener("click", () => {
-      console.log(camera.position.length());
-    });
-
     camera.position.copy(params.cameraPosition);
     controls.target = params.controlsTarget;
 
@@ -74,6 +70,7 @@ const CameraControls = ({ zone }) => {
       {
         progress: 1,
         duration: 1.2,
+        delay: zoomOut ? 0.8 : 0,
         onStart: () => {
           controls.enabled = false;
         },
@@ -119,7 +116,7 @@ const CameraControls = ({ zone }) => {
 
     if (!previousZone.current) {
       savedPosition.current = camera.position.clone();
-      savedTarget.current = controlsRef.current.target.clone();
+      savedTarget.current = controls.target.clone();
     }
 
     animateCamera(zone.camera, zone.target);
