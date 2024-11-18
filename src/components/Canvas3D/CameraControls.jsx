@@ -9,8 +9,8 @@ const params = {
   controlsTarget: new THREE.Vector3(-32, -154, -55),
   limitNX: -960,
   limitPX: 960,
-  limitNZ: -540,
-  limitPZ: 540,
+  limitNZ: -640,
+  limitPZ: 640,
   limitNY: 12,
 };
 
@@ -29,6 +29,10 @@ const CameraControls = ({ zone }) => {
       params.cameraPosition
     );
 
+    window.addEventListener("click", () => {
+      console.log(camera.position.length());
+    });
+
     camera.position.copy(params.cameraPosition);
     controls.target = params.controlsTarget;
 
@@ -39,10 +43,13 @@ const CameraControls = ({ zone }) => {
       camera.position.x = Math.min(params.limitPX, Math.max(params.limitNX, camera.position.x));
       camera.position.y = Math.max(params.limitNY, camera.position.y);
       camera.position.z = Math.min(params.limitPZ, Math.max(params.limitNZ, camera.position.z));
+
+      controls.target.x = Math.min(params.limitPX, Math.max(params.limitNX, controls.target.x));
+      controls.target.z = Math.min(params.limitPZ, Math.max(params.limitNZ, controls.target.z));
     });
   }, []);
 
-  const animateCamera = (position, target) => {
+  const animateCamera = (position, target, zoomOut = false) => {
     let controls = controlsRef.current;
 
     let initialPosition = camera.position.clone();
@@ -88,6 +95,9 @@ const CameraControls = ({ zone }) => {
         },
         onComplete: () => {
           controls.enabled = true;
+          if (zoomOut) {
+            controls.target = savedTarget.current;
+          }
         },
       },
       "<"
@@ -101,8 +111,9 @@ const CameraControls = ({ zone }) => {
       previousZone.current = null;
 
       if (savedPosition.current && savedTarget.current) {
-        animateCamera(savedPosition.current, savedTarget.current);
+        animateCamera(savedPosition.current, savedTarget.current, true);
       }
+
       return;
     }
 
@@ -121,9 +132,10 @@ const CameraControls = ({ zone }) => {
         ref={controlsRef}
         makeDefault
         dampingFactor={0.1}
-        maxPolarAngle={Math.PI * 0.4}
+        maxPolarAngle={Math.PI * 0.36}
         panSpeed={0.4}
         rotateSpeed={0.4}
+        maxDistance={1800}
       />
     </>
   );
