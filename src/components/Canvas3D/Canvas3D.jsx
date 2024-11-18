@@ -51,6 +51,7 @@ const Canvas3D = ({ zone, setZone }) => {
           gl={{
             ...rendererProps,
             // antialias: false,
+            alpha: true,
           }}
           camera={{
             position: [-300, 700, 200],

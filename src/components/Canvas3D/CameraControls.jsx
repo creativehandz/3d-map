@@ -129,10 +129,11 @@ const CameraControls = ({ zone }) => {
         ref={controlsRef}
         makeDefault
         dampingFactor={0.1}
-        maxPolarAngle={Math.PI * 0.36}
+        maxPolarAngle={Math.PI * 0.26}
         panSpeed={0.4}
         rotateSpeed={0.4}
-        maxDistance={1800}
+        maxDistance={800}
+        zoomSpeed={0.3}
       />
     </>
   );
