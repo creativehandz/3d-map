@@ -7,15 +7,19 @@ import gsap from "gsap/all";
 const params = {
   cameraPosition: new THREE.Vector3(-255, 348, 330),
   controlsTarget: new THREE.Vector3(-32, -154, -55),
-  limitNX: -720,
-  limitPX: 720,
-  limitNZ: -480,
-  limitPZ: 480,
+  limitNX: -960,
+  limitPX: 960,
+  limitNZ: -540,
+  limitPZ: 540,
   limitNY: 12,
 };
 
 const CameraControls = ({ zone }) => {
   const controlsRef = useRef();
+  const previousZone = useRef();
+  const savedPosition = useRef();
+  const savedTarget = useRef();
+
   const { camera } = useThree();
 
   useEffect(() => {
@@ -28,12 +32,10 @@ const CameraControls = ({ zone }) => {
     camera.position.copy(params.cameraPosition);
     controls.target = params.controlsTarget;
 
-    // window.addEventListener("click", () => {
-    //   console.log("camera: ", camera.position);
-    //   console.log("target: ", controls.target);
-    // });
-
     controls.addEventListener("change", () => {
+      if (!controls.enabled) {
+        return;
+      }
       camera.position.x = Math.min(params.limitPX, Math.max(params.limitNX, camera.position.x));
       camera.position.y = Math.max(params.limitNY, camera.position.y);
       camera.position.z = Math.min(params.limitPZ, Math.max(params.limitNZ, camera.position.z));
@@ -93,11 +95,24 @@ const CameraControls = ({ zone }) => {
   };
 
   useEffect(() => {
+    let controls = controlsRef.current;
+
     if (!zone) {
+      previousZone.current = null;
+
+      if (savedPosition.current && savedTarget.current) {
+        animateCamera(savedPosition.current, savedTarget.current);
+      }
       return;
     }
 
+    if (!previousZone.current) {
+      savedPosition.current = camera.position.clone();
+      savedTarget.current = controlsRef.current.target.clone();
+    }
+
     animateCamera(zone.camera, zone.target);
+    previousZone.current = zone.name;
   }, [zone]);
 
   return (

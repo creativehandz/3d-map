@@ -1,76 +1,15 @@
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import gsap from "gsap/all";
 import * as THREE from "three";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
 
 const Zones = ({ focusTo }) => {
   const { getNode, assets } = useContext(LoaderContext);
 
+  const groupRef = useRef();
   const [zoneList, setZoneList] = useState({});
-  const { camera, controls } = useThree();
-
-  const animateCamera = useCallback(
-    (position, target) => {
-      if (!controls) {
-        return;
-      }
-      // camera.position.copy(position);
-      // // camera.lookAt(target);
-      // if (controls) {
-      //   controls.target = target;
-      // }
-
-      let initialPosition = camera.position.clone();
-      let initialDirection = new THREE.Vector3();
-      camera.getWorldDirection(initialDirection);
-      initialDirection.normalize().multiplyScalar(0.001);
-
-      let targetPosition = position.clone();
-      let targetDirection = new THREE.Vector3()
-        .subVectors(target, position)
-        .normalize()
-        .multiplyScalar(0.001);
-
-      let tl = gsap.timeline();
-
-      let animation = {
-        progress: 0,
-      };
-
-      tl.to(
-        animation,
-        {
-          progress: 1,
-          duration: 1.2,
-          onStart: () => {
-            controls.enabled = false;
-          },
-          onUpdate: () => {
-            let p = new THREE.Vector3().lerpVectors(
-              initialPosition,
-              targetPosition,
-              animation.progress
-            );
-            camera.position.copy(p);
-
-            let t = new THREE.Vector3()
-              .lerpVectors(initialDirection, targetDirection, animation.progress)
-              .normalize()
-              .multiplyScalar(0.001)
-              .add(camera.position);
-            camera.lookAt(t);
-            controls.target = t;
-          },
-          onComplete: () => {
-            controls.enabled = true;
-          },
-        },
-        "<"
-      );
-    },
-    [controls]
-  );
+  const { camera, controls, raycaster, pointer, scene } = useThree();
 
   useEffect(() => {
     let list = {};
@@ -92,6 +31,7 @@ const Zones = ({ focusTo }) => {
 
       if (node.name.slice(-4) == "Zone") {
         list[node.name] = {
+          name: node.name,
           geometry: node.geometry,
           material,
           hoverTl,
@@ -111,6 +51,7 @@ const Zones = ({ focusTo }) => {
 
       let zoneName = node.name.slice(0, 3) + "Zone";
       let p = node.position.clone().applyQuaternion(q);
+      p.x += 100;
 
       list[zoneName][type] = p;
     });
@@ -118,12 +59,24 @@ const Zones = ({ focusTo }) => {
     setZoneList(list);
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("click", () => {
+      raycaster.setFromCamera(pointer, camera);
+      let intersects = raycaster.intersectObjects(groupRef.current.children);
+      if (intersects.length == 0) {
+        focusTo(false);
+        return;
+      }
+    });
+  }, []);
+
   return (
-    <>
+    <group ref={groupRef}>
       {Object.entries(zoneList).map(([name, zone]) => {
         return (
           <mesh
             key={name}
+            userData={{ name }}
             geometry={zone.geometry}
             material={zone.material}
             onPointerEnter={() => {
@@ -140,25 +93,7 @@ const Zones = ({ focusTo }) => {
           ></mesh>
         );
       })}
-
-      {/* {zoneList.map((zone) => {
-        return (
-          <mesh
-            key={zone.name}
-            geometry={zone.geometry}
-            material={zone.material}
-            onPointerEnter={() => {
-              document.body.style.cursor = "pointer";
-              zone.hoverTl.play();
-            }}
-            onPointerLeave={() => {
-              document.body.style.cursor = "auto";
-              zone.hoverTl.reverse();
-            }}
-          ></mesh>
-        );
-      })} */}
-    </>
+    </group>
   );
 };
 export default Zones;
