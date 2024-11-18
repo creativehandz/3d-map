@@ -111,14 +111,12 @@ const Zones = () => {
       list[zoneName][type] = node.position.clone();
     });
 
-    console.log(list);
     setZoneList(list);
   }, []);
 
   return (
     <>
       {Object.entries(zoneList).map(([name, zone]) => {
-        console.log(name);
         return (
           <mesh
             key={name}

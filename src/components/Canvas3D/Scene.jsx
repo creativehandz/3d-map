@@ -8,49 +8,51 @@ const Scene = () => {
 
   return (
     <>
-      <mesh geometry={getNode("model", "_00Base").geometry}>
-        <meshBasicMaterial map={getTexture("map")} />
-      </mesh>
+      <group rotation-y={Math.PI * 0.27} position-x={100}>
+        <mesh geometry={getNode("model", "_00Base").geometry}>
+          <meshBasicMaterial map={getTexture("map")} />
+        </mesh>
 
-      <mesh geometry={getNode("model", "_00Buildings").geometry}>
-        <meshPhongMaterial flatShading />
-      </mesh>
+        <mesh geometry={getNode("model", "_00Buildings").geometry}>
+          <meshPhongMaterial flatShading />
+        </mesh>
 
-      <mesh geometry={getNode("model", "_01Buildings").geometry}>
-        <meshPhongMaterial flatShading />
-      </mesh>
+        <mesh geometry={getNode("model", "_01Buildings").geometry}>
+          <meshPhongMaterial flatShading />
+        </mesh>
 
-      <mesh geometry={getNode("model", "_02Buildings").geometry}>
-        <meshPhongMaterial flatShading />
-      </mesh>
+        <mesh geometry={getNode("model", "_02Buildings").geometry}>
+          <meshPhongMaterial flatShading />
+        </mesh>
 
-      <mesh geometry={getNode("model", "_03Buildings").geometry}>
-        <meshPhongMaterial flatShading />
-      </mesh>
+        <mesh geometry={getNode("model", "_03Buildings").geometry}>
+          <meshPhongMaterial flatShading />
+        </mesh>
 
-      <mesh geometry={getNode("model", "_00Roads").geometry}>
-        <meshPhongMaterial color={0xcdcdcd} flatShading side={THREE.DoubleSide} />
-      </mesh>
+        <mesh geometry={getNode("model", "_00Roads").geometry}>
+          <meshPhongMaterial color={0xcdcdcd} flatShading side={THREE.DoubleSide} />
+        </mesh>
 
-      <mesh geometry={getNode("model", "_00HardSurface").geometry}>
-        <meshPhongMaterial color={0xc0c0c0} flatShading side={THREE.DoubleSide} />
-      </mesh>
+        <mesh geometry={getNode("model", "_00HardSurface").geometry}>
+          <meshPhongMaterial color={0xc0c0c0} flatShading side={THREE.DoubleSide} />
+        </mesh>
 
-      <mesh geometry={getNode("model", "_00Water").geometry}>
-        <meshPhongMaterial color={0xafbff} flatShading side={THREE.DoubleSide} />
-      </mesh>
+        <mesh geometry={getNode("model", "_00Water").geometry}>
+          <meshPhongMaterial color={0xafbff} flatShading side={THREE.DoubleSide} />
+        </mesh>
 
-      {/* <mesh geometry={getNode("model", "_00GreenMed").geometry}>
+        {/* <mesh geometry={getNode("model", "_00GreenMed").geometry}>
         <meshPhongMaterial color={0xddffdd} flatShading side={THREE.DoubleSide} />
       </mesh> */}
 
-      <directionalLight position={[1, 1, 1]} intensity={1.2} />
-      <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
-      <ambientLight intensity={1.4} />
+        <directionalLight position={[1, 1, 1]} intensity={1.2} />
+        <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
+        <ambientLight intensity={1.4} />
 
-      {/* <axesHelper args={[1000]} /> */}
+        <Zones />
+      </group>
 
-      <Zones />
+      <axesHelper args={[1000]} position-y={4} />
     </>
   );
 };
