@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useThree } from "@react-three/fiber";
 
-const Zones = () => {
+const Zones = ({ focusTo }) => {
   const { getNode, assets } = useContext(LoaderContext);
 
   const [zoneList, setZoneList] = useState({});
@@ -101,6 +101,8 @@ const Zones = () => {
       }
     });
 
+    let q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.27);
+
     zoneMeshes.traverse((node) => {
       let type = node.name.substring(3, node.name.length).toLowerCase();
       if (!(type == "target" || type == "camera")) {
@@ -108,7 +110,9 @@ const Zones = () => {
       }
 
       let zoneName = node.name.slice(0, 3) + "Zone";
-      list[zoneName][type] = node.position.clone();
+      let p = node.position.clone().applyQuaternion(q);
+
+      list[zoneName][type] = p;
     });
 
     setZoneList(list);
@@ -131,7 +135,7 @@ const Zones = () => {
               zone.hoverTl.reverse();
             }}
             onClick={() => {
-              animateCamera(zone.camera, zone.target);
+              focusTo(zone);
             }}
           ></mesh>
         );

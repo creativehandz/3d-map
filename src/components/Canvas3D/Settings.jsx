@@ -1,5 +1,4 @@
 import { ModeContext } from "src/contexts/ModeContext.jsx";
-import CameraControls from "./CameraControls.jsx";
 import { Perf } from "r3f-perf";
 import { useContext, Suspense, useRef, useMemo } from "react";
 import { useControls } from "leva";
@@ -9,12 +8,7 @@ import * as THREE from "three";
 const Settings = () => {
   const mode = useContext(ModeContext);
 
-  return (
-    <>
-      ({mode == "DEV" && <Perf position="top-left" />}
-      <CameraControls />)
-    </>
-  );
+  return <>({mode == "DEV" && <Perf position="top-left" />})</>;
 };
 
 export default Settings;

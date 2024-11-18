@@ -5,7 +5,8 @@ import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import { Leva, useControls } from "leva";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import CameraControls from "./CameraControls.jsx";
 
 const Canvas3D = () => {
   const mode = useContext(ModeContext);
@@ -39,6 +40,11 @@ const Canvas3D = () => {
     },
   });
 
+  const [zone, setZone] = useState();
+  const focusTo = (zone) => {
+    setZone(zone);
+  };
+
   return (
     <div className="fixed inset-0">
       {completed && (
@@ -55,7 +61,8 @@ const Canvas3D = () => {
         >
           <Settings />
 
-          <Scene />
+          <CameraControls zone={zone} />
+          <Scene focusTo={focusTo} />
         </Canvas>
       )}
 

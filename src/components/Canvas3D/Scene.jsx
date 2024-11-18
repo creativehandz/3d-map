@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useContext } from "react";
 import Zones from "./Zones.jsx";
 
-const Scene = () => {
+const Scene = ({ focusTo }) => {
   const { getNode, getTexture } = useContext(LoaderContext);
 
   return (
@@ -47,9 +47,9 @@ const Scene = () => {
 
         <directionalLight position={[1, 1, 1]} intensity={1.2} />
         <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
-        <ambientLight intensity={1.4} />
+        <ambientLight intensity={2.4} />
 
-        <Zones />
+        <Zones focusTo={focusTo} />
       </group>
 
       <axesHelper args={[1000]} position-y={4} />
