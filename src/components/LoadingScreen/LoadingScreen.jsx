@@ -17,11 +17,18 @@ const LoadingScreen = ({ setEntered }) => {
 
   const hideTl = useRef(gsap.timeline().pause());
   useEffect(() => {
+    if (mode == "DEV") {
+      hideTl.current.play();
+      setEntered(true);
+      return;
+    }
+
     let tl = gsap.timeline().pause();
 
     tl.to(container.current, {
       delay: 0.2,
       opacity: 0,
+      duration: 0.8,
       onComplete: () => {
         container.current.style.display = "none";
       },
@@ -32,7 +39,6 @@ const LoadingScreen = ({ setEntered }) => {
 
   useEffect(() => {
     if (mode == "DEV") {
-      // setCompleted(true);
       return;
     }
 
@@ -42,7 +48,7 @@ const LoadingScreen = ({ setEntered }) => {
       scaleX: progress,
       ease: "linear",
       delay: progress < 0.3 ? 0.4 : 0.0,
-      duration: 0.2,
+      duration: 0.8,
       onComplete: () => {
         if (progress == 1) {
           setAnimationCompleted(true);
@@ -52,6 +58,10 @@ const LoadingScreen = ({ setEntered }) => {
   }, [progress]);
 
   useEffect(() => {
+    if (mode == "DEV") {
+      return;
+    }
+
     if (animationCompleted) {
       let tl = animationTl;
 
@@ -72,7 +82,7 @@ const LoadingScreen = ({ setEntered }) => {
 
   return (
     <>
-      {true && (
+      {mode != "DEV" && (
         <div
           id="loading"
           className="fixed inset-0 z-[100] flex items-center justify-center"

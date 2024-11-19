@@ -5,7 +5,7 @@ import * as THREE from "three";
 import gsap from "gsap/all";
 
 const params = {
-  initialPosition: new THREE.Vector3(-880, 1600, 880),
+  initialPosition: new THREE.Vector3(50, 2400, 300),
   initialTarget: new THREE.Vector3(0, 0, 0),
 
   viewPosition: new THREE.Vector3(-255, 348, 330),
@@ -18,7 +18,7 @@ const params = {
   limitNY: 12,
 };
 
-const CameraControls = ({ entered, zone }) => {
+const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
   const controlsRef = useRef();
   const previousZone = useRef();
   const savedPosition = useRef();
@@ -81,11 +81,14 @@ const CameraControls = ({ entered, zone }) => {
   };
 
   useEffect(() => {
-    console.log(entered);
-
     if (entered) {
       animateCamera(params.viewPosition, params.viewTarget, {
         duration: 3,
+        delay: 0.4,
+        onComplete: () => {
+          controlsRef.current.target = new THREE.Vector3(-32, -154, -55);
+          setInitialAnimationCompleted(true);
+        },
       });
     }
   }, [entered]);
