@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { useContext, useState } from "react";
 import CameraControls from "./CameraControls.jsx";
 
-const Canvas3D = ({ zone, setZone }) => {
+const Canvas3D = ({ entered, zone, setZone }) => {
   const mode = useContext(ModeContext);
   const { completed } = useContext(LoaderContext);
 
@@ -57,7 +57,7 @@ const Canvas3D = ({ zone, setZone }) => {
         >
           <Settings />
 
-          <CameraControls zone={zone} />
+          <CameraControls entered={entered} zone={zone} />
           <Scene zone={zone} setZone={setZone} />
         </Canvas>
       )}

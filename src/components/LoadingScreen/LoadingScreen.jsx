@@ -1,19 +1,34 @@
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import { ModeContext } from "src/contexts/ModeContext.jsx";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, useMemo } from "react";
 import gsap from "gsap/all";
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ setEntered }) => {
   const mode = useContext(ModeContext);
   const { progress, completed } = useContext(LoaderContext);
   const [animationCompleted, setAnimationCompleted] = useState(false);
 
-  const animation = useRef({ progress: 0 });
-  const timeline = useRef(gsap.timeline());
   const container = useRef();
   const indicator = useRef();
   const line = useRef();
   const button = useRef();
+
+  const animationTl = useMemo(() => gsap.timeline(), []);
+
+  const hideTl = useRef(gsap.timeline().pause());
+  useEffect(() => {
+    let tl = gsap.timeline().pause();
+
+    tl.to(container.current, {
+      delay: 0.2,
+      opacity: 0,
+      onComplete: () => {
+        container.current.style.display = "none";
+      },
+    });
+
+    hideTl.current = tl;
+  }, []);
 
   useEffect(() => {
     if (mode == "DEV") {
@@ -21,14 +36,13 @@ const LoadingScreen = () => {
       return;
     }
 
-    let tl = timeline.current;
-    let a = animation.current;
+    let tl = animationTl;
 
     tl.to(line.current, {
       scaleX: progress,
       ease: "linear",
       delay: progress < 0.3 ? 0.4 : 0.0,
-      duration: 0.8,
+      duration: 0.2,
       onComplete: () => {
         if (progress == 1) {
           setAnimationCompleted(true);
@@ -39,8 +53,8 @@ const LoadingScreen = () => {
 
   useEffect(() => {
     if (animationCompleted) {
-      let tl = timeline.current;
-      console.log("a");
+      let tl = animationTl;
+
       tl.to(button.current, {
         delay: 0.2,
         opacity: 1,
@@ -50,6 +64,11 @@ const LoadingScreen = () => {
       });
     }
   }, [animationCompleted]);
+
+  const onEnter = () => {
+    hideTl.current.play();
+    setEntered(true);
+  };
 
   return (
     <>
@@ -76,6 +95,7 @@ const LoadingScreen = () => {
               <button
                 ref={button}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full text-white px-6 py-1 rounded-full text-6xl font-medium drop-shadow-lg pointer-events-none opacity-0 scale-0 cursor-pointer"
+                onClick={onEnter}
               >
                 Enter
               </button>
