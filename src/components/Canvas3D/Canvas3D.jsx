@@ -5,9 +5,10 @@ import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import { Leva, useControls } from "leva";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import CameraControls from "./CameraControls.jsx";
 
-const Canvas3D = () => {
+const Canvas3D = ({ zone, setZone }) => {
   const mode = useContext(ModeContext);
   const { completed } = useContext(LoaderContext);
 
@@ -45,7 +46,8 @@ const Canvas3D = () => {
         <Canvas
           gl={{
             ...rendererProps,
-            antialias: false,
+            // antialias: false,
+            alpha: true,
           }}
           camera={{
             position: [-300, 700, 200],
@@ -55,7 +57,8 @@ const Canvas3D = () => {
         >
           <Settings />
 
-          <Scene />
+          <CameraControls zone={zone} />
+          <Scene zone={zone} setZone={setZone} />
         </Canvas>
       )}
 
