@@ -40,10 +40,6 @@ const Canvas3D = ({ zone, setZone }) => {
     },
   });
 
-  const focusTo = (zone) => {
-    setZone(zone);
-  };
-
   return (
     <div className="fixed inset-0">
       {completed && (
@@ -62,7 +58,7 @@ const Canvas3D = ({ zone, setZone }) => {
           <Settings />
 
           <CameraControls zone={zone} />
-          <Scene focusTo={focusTo} />
+          <Scene zone={zone} setZone={setZone} />
         </Canvas>
       )}
 

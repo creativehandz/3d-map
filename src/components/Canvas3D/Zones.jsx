@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
 
-const Zones = ({ focusTo }) => {
+const Zones = ({ zone, setZone }) => {
   const { getNode, assets } = useContext(LoaderContext);
 
   const groupRef = useRef();
@@ -59,16 +59,25 @@ const Zones = ({ focusTo }) => {
     setZoneList(list);
   }, []);
 
+  const zoomOut = useCallback(() => {
+    if (zone) {
+      return;
+    }
+    raycaster.setFromCamera(pointer, camera);
+    let intersects = raycaster.intersectObjects(groupRef.current.children);
+    if (intersects.length == 0) {
+      setZone(false);
+      return;
+    }
+  }, [zone]);
+
   useEffect(() => {
-    window.addEventListener("click", () => {
-      raycaster.setFromCamera(pointer, camera);
-      let intersects = raycaster.intersectObjects(groupRef.current.children);
-      if (intersects.length == 0) {
-        focusTo(false);
-        return;
-      }
-    });
-  }, []);
+    window.addEventListener("click", zoomOut);
+
+    return () => {
+      window.removeEventListener("click", zoomOut);
+    };
+  }, [zoomOut]);
 
   return (
     <group ref={groupRef}>
@@ -88,7 +97,7 @@ const Zones = ({ focusTo }) => {
               zone.hoverTl.reverse();
             }}
             onClick={() => {
-              focusTo(zone);
+              setZone(zone);
             }}
           ></mesh>
         );

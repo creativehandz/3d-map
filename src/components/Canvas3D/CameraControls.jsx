@@ -91,8 +91,10 @@ const CameraControls = ({ zone }) => {
           controls.target = t;
         },
         onComplete: () => {
-          controls.enabled = true;
+          // setTimeout(() => {
+          // }, 100);
           if (zoomOut) {
+            controls.enabled = true;
             controls.target = savedTarget.current;
           }
         },
@@ -103,14 +105,11 @@ const CameraControls = ({ zone }) => {
 
   useEffect(() => {
     let controls = controlsRef.current;
-
     if (!zone) {
       previousZone.current = null;
-
       if (savedPosition.current && savedTarget.current) {
         animateCamera(savedPosition.current, savedTarget.current, true);
       }
-
       return;
     }
 
@@ -118,7 +117,6 @@ const CameraControls = ({ zone }) => {
       savedPosition.current = camera.position.clone();
       savedTarget.current = controls.target.clone();
     }
-
     animateCamera(zone.camera, zone.target);
     previousZone.current = zone.name;
   }, [zone]);
@@ -132,7 +130,7 @@ const CameraControls = ({ zone }) => {
         maxPolarAngle={Math.PI * 0.26}
         panSpeed={0.4}
         rotateSpeed={0.4}
-        maxDistance={800}
+        maxDistance={1000}
         zoomSpeed={0.3}
       />
     </>

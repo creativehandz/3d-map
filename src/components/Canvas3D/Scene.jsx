@@ -5,7 +5,7 @@ import Zones from "./Zones.jsx";
 import vs from "src/assets/shaders/vs.glsl?raw";
 import fs from "src/assets/shaders/fs.glsl?raw";
 
-const Scene = ({ focusTo }) => {
+const Scene = ({ zone, setZone }) => {
   const { getNode, getTexture } = useContext(LoaderContext);
 
   return (
@@ -54,10 +54,10 @@ const Scene = ({ focusTo }) => {
         <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
         <ambientLight intensity={2.4} />
 
-        <Zones focusTo={focusTo} />
+        <Zones zone={zone} setZone={setZone} />
       </group>
 
-      <axesHelper args={[1000]} position-y={4} />
+      {/* <axesHelper args={[1000]} position-y={4} /> */}
     </>
   );
 };
