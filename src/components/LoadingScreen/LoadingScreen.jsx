@@ -5,70 +5,88 @@ import gsap from "gsap/all";
 
 const LoadingScreen = () => {
   const mode = useContext(ModeContext);
-  const { progress } = useContext(LoaderContext);
-  const [completed, setCompleted] = useState(false);
+  const { progress, completed } = useContext(LoaderContext);
+  const [animationCompleted, setAnimationCompleted] = useState(false);
 
   const animation = useRef({ progress: 0 });
   const timeline = useRef(gsap.timeline());
   const container = useRef();
   const indicator = useRef();
   const line = useRef();
-  const text = useRef();
+  const button = useRef();
 
   useEffect(() => {
     if (mode == "DEV") {
-      setCompleted(true);
+      // setCompleted(true);
       return;
     }
 
     let tl = timeline.current;
     let a = animation.current;
 
-    tl.to(a, {
-      progress: progress,
-      duration: 0.2,
+    tl.to(line.current, {
+      scaleX: progress,
       ease: "linear",
-      onUpdate: () => {
-        text.current.innerText = `${(a.progress * 100).toFixed(0)}%`;
-        line.current.style.transform = `scaleX(${a.progress})`;
-
-        if (a.progress == 1) {
-          tl.to(indicator.current, {
-            y: "100%",
-            delay: 0.8,
-            duration: 0.4,
-            opacity: 0,
-            ease: "power1.out",
-          });
-
-          tl.to(container.current, {
-            opacity: 0,
-            duration: 0.4,
-            onComplete: () => {
-              setCompleted(true);
-            },
-          });
+      delay: progress < 0.3 ? 0.4 : 0.0,
+      duration: 0.8,
+      onComplete: () => {
+        if (progress == 1) {
+          setAnimationCompleted(true);
         }
       },
     });
   }, [progress]);
 
+  useEffect(() => {
+    if (animationCompleted) {
+      let tl = timeline.current;
+      console.log("a");
+      tl.to(button.current, {
+        delay: 0.2,
+        opacity: 1,
+        scale: 1,
+        pointerEvents: "auto",
+        ease: "back.out(4)",
+      });
+    }
+  }, [animationCompleted]);
+
   return (
     <>
-      {!completed && (
+      {true && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#ffffff]"
+          id="loading"
+          className="fixed inset-0 z-[100] flex items-center justify-center"
           ref={container}
         >
+          <div id="kenburn-wrapper" className="absolute inset-0">
+            <img
+              src="./V5.jpg"
+              id="kenburn-img"
+              className="absolute top-0 left-0 w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-black opacity-10 pointer-events-none"></div>
+          </div>
+
           <div
-            className="absolute bottom-0 left-0 right-0 flex flex-col items-center gap-y-4"
+            className="absolute top-3/4 -translate-y-1/2 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
             ref={indicator}
           >
-            <div className="text-[#121212]" ref={text}>
-              0%
+            <div className="relative hover:scale-105 transition">
+              <button
+                ref={button}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full text-white px-6 py-1 rounded-full text-6xl font-medium drop-shadow-lg pointer-events-none opacity-0 scale-0 cursor-pointer"
+              >
+                Enter
+              </button>
             </div>
 
-            <div className="h-2 w-full origin-left scale-x-0 bg-[#121212]" ref={line}></div>
+            <div className="h-6 border-2 shadow-xl container mx-auto bg-transparent relative">
+              <div
+                ref={line}
+                className="absolute top-0 left-0 h-full origin-left w-full bg-white scale-x-0"
+              ></div>
+            </div>
           </div>
         </div>
       )}
@@ -77,4 +95,3 @@ const LoadingScreen = () => {
 };
 
 export default LoadingScreen;
-
