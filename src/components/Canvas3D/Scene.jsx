@@ -4,8 +4,9 @@ import { useContext } from "react";
 import Zones from "./Zones.jsx";
 import vs from "src/assets/shaders/vs.glsl?raw";
 import fs from "src/assets/shaders/fs.glsl?raw";
+import { Cloud, Clouds } from "@react-three/drei";
 
-const Scene = ({ zone, setZone }) => {
+const Scene = ({ initialAnimationCompleted, zone, setZone }) => {
   const { getNode, getTexture } = useContext(LoaderContext);
 
   return (
@@ -54,7 +55,34 @@ const Scene = ({ zone, setZone }) => {
         <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
         <ambientLight intensity={2.4} />
 
-        <Zones zone={zone} setZone={setZone} />
+        <Zones
+          initialAnimationCompleted={initialAnimationCompleted}
+          zone={zone}
+          setZone={setZone}
+        />
+
+        {!initialAnimationCompleted && (
+          <Clouds renderOrder={5}>
+            {Array(16)
+              .fill(1)
+              .map((i, index) => {
+                return (
+                  <Cloud
+                    key={index}
+                    segments={6}
+                    bounds={[400, 200, 400]}
+                    scale={[2, 2, 2]}
+                    volume={1000}
+                    position={[
+                      (Math.random() - 0.5) * 500,
+                      1500 + (Math.random() - 0.5) * 300,
+                      (Math.random() - 0.5) * 500,
+                    ]}
+                  />
+                );
+              })}
+          </Clouds>
+        )}
       </group>
 
       {/* <axesHelper args={[1000]} position-y={4} /> */}

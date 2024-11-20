@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
 
-const Zones = ({ zone, setZone }) => {
+const Zones = ({ initialAnimationCompleted, zone, setZone }) => {
   const { getNode, assets } = useContext(LoaderContext);
 
   const groupRef = useRef();
@@ -79,6 +79,16 @@ const Zones = ({ zone, setZone }) => {
     };
   }, [zoomOut]);
 
+  const onZoneClick = useCallback(
+    (zone) => {
+      if (!initialAnimationCompleted) {
+        return;
+      }
+      setZone(zone);
+    },
+    [initialAnimationCompleted]
+  );
+
   return (
     <group ref={groupRef}>
       {Object.entries(zoneList).map(([name, zone]) => {
@@ -97,7 +107,7 @@ const Zones = ({ zone, setZone }) => {
               zone.hoverTl.reverse();
             }}
             onClick={() => {
-              setZone(zone);
+              onZoneClick(zone);
             }}
           ></mesh>
         );

@@ -8,13 +8,14 @@ import { useState } from "react";
 
 const App = () => {
   const [zone, setZone] = useState();
+  const [entered, setEntered] = useState(false);
 
   return (
     <ModeProvider>
       <LoaderProvider sources={sources}>
         <div className="app">
-          <Canvas3D zone={zone} setZone={setZone} />
-          <LoadingScreen />
+          <Canvas3D entered={entered} zone={zone} setZone={setZone} />
+          <LoadingScreen setEntered={setEntered} />
 
           <Popup zone={zone} setZone={setZone} />
         </div>

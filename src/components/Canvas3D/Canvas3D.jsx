@@ -8,9 +8,11 @@ import * as THREE from "three";
 import { useContext, useState } from "react";
 import CameraControls from "./CameraControls.jsx";
 
-const Canvas3D = ({ zone, setZone }) => {
+const Canvas3D = ({ entered, zone, setZone }) => {
   const mode = useContext(ModeContext);
   const { completed } = useContext(LoaderContext);
+
+  const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(false);
 
   const rendererProps = useControls("Renderer", {
     outputColorSpace: {
@@ -57,8 +59,17 @@ const Canvas3D = ({ zone, setZone }) => {
         >
           <Settings />
 
-          <CameraControls zone={zone} />
-          <Scene zone={zone} setZone={setZone} />
+          <CameraControls
+            entered={entered}
+            zone={zone}
+            setInitialAnimationCompleted={setInitialAnimationCompleted}
+          />
+          <Scene
+            initialAnimationCompleted={initialAnimationCompleted}
+            zone={zone}
+            setZone={setZone}
+            entered={entered}
+          />
         </Canvas>
       )}
 
