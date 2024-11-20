@@ -114,7 +114,15 @@ const LoadingScreen = ({ setEntered }) => {
                 Innovating Tomorrow, Sustainably Today
               </p>
               </div>
-
+              <div
+            className="absolute inset-0 bg-repeat z-10 pointer-events-none"
+            style={{
+              backgroundImage: "url('/cloud-overlay.png')",
+              animation: "cloudLoop 80s linear infinite",
+              backgroundSize: "cover",
+              backgroundPosition: "center bottom",
+            }}
+          ></div>
               <div
                 className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
                 ref={indicator}
