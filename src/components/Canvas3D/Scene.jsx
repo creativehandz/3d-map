@@ -55,7 +55,11 @@ const Scene = ({ initialAnimationCompleted, zone, setZone }) => {
         <hemisphereLight groundColor={0xffdfcf} color={0xddddff} />
         <ambientLight intensity={2.4} />
 
-        <Zones zone={zone} setZone={setZone} />
+        <Zones
+          initialAnimationCompleted={initialAnimationCompleted}
+          zone={zone}
+          setZone={setZone}
+        />
 
         {!initialAnimationCompleted && (
           <Clouds renderOrder={5}>

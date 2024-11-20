@@ -111,7 +111,7 @@ const LoadingScreen = ({ setEntered }) => {
               </button>
             </div>
 
-            <div className="h-6 border-2 shadow-xl container mx-auto bg-transparent relative">
+            <div className="h-6 border-2 shadow-xl container mx-auto bg-transparent relative opacity-0">
               <div
                 ref={line}
                 className="absolute top-0 left-0 h-full origin-left w-full bg-white scale-x-0"
