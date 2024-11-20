@@ -96,36 +96,45 @@ const LoadingScreen = ({ setEntered }) => {
             />
             <div className="absolute inset-0 bg-black opacity-10 pointer-events-none"></div>
           </div>
-
           <div
-            className="absolute top-3/4 -translate-y-1/2 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
-            ref={indicator}
-          >
-              {/* Logo */}
-              <img src="./public/logo.jpeg" alt="Logo" className="w-20 h-20" />
+              id="loading"
+              className="fixed inset-0 z-[100] flex flex-col items-center justify-between"
+              ref={container}
+            >
+              <img
+                src="./logo.jpeg"
+                alt="Logo"
+                className="w-24 h-auto mt-8"
+              />
 
-            {/* Text */}
-            <p className="text-white text-xl font-medium">Building Visions,
-              Shaping The Future
-              Innovating Tomorrow, Sustainably Today</p>
+              <div className="flex-1 flex items-center justify-center text-center">
+                <p className="text-white text-2xl font-light">
+                Building Visions,
+                Shaping The Future
+                Innovating Tomorrow, Sustainably Today
+              </p>
+              </div>
 
-            <div className="relative hover:scale-105 transition">
-              <button
-                ref={button}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full text-white px-6 py-1 rounded-full text-6xl font-medium drop-shadow-lg pointer-events-none opacity-0 scale-0 cursor-pointer"
-                onClick={onEnter}
-              >
-                Enter
-              </button>
-            </div>
-
-            <div className="h-6 border-2 shadow-xl container mx-auto bg-transparent relative opacity-0">
               <div
-                ref={line}
-                className="absolute top-0 left-0 h-full origin-left w-full bg-white scale-x-0"
-              ></div>
+                className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
+                ref={indicator}
+              >
+                <button
+                  ref={button}
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full text-white px-6 py-1 rounded-full text-6xl font-medium drop-shadow-lg pointer-events-none opacity-0 scale-0 cursor-pointer"
+                  onClick={onEnter}
+                >
+                  Enter
+                </button>
+
+                <div className="h-6 border-2 shadow-xl container mx-auto bg-transparent relative opacity-0">
+                  <div
+                    ref={line}
+                    className="absolute top-0 left-0 h-full origin-left w-full bg-white scale-x-0"
+                  ></div>
+                </div>
+              </div>
             </div>
-          </div>
         </div>
       )}
     </>
