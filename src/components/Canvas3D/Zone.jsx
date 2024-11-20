@@ -121,6 +121,28 @@ const Zone = ({ name, geometry, target, info, focusedZone, setFocusedZone }) => 
     }
   }, [status]);
 
+  // Updating rotation
+  const { controls } = useThree();
+
+  useEffect(() => {
+    let update = () => {
+      let indicatorPosition = target.clone();
+
+      let cameraPosition = controls.object.position.clone();
+      cameraPosition.y = indicatorPosition.y;
+
+      indicatorRef.current.lookAt(cameraPosition);
+    };
+
+    update();
+
+    controls.addEventListener("change", update);
+
+    return () => {
+      controls.removeEventListener("change", update);
+    };
+  }, [controls]);
+
   return (
     <>
       <mesh
