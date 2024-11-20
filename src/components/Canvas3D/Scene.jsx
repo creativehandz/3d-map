@@ -6,7 +6,7 @@ import vs from "src/assets/shaders/vs.glsl?raw";
 import fs from "src/assets/shaders/fs.glsl?raw";
 import { Cloud, Clouds } from "@react-three/drei";
 
-const Scene = ({ initialAnimationCompleted, zone, setZone }) => {
+const Scene = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
   const { getNode, getTexture } = useContext(LoaderContext);
 
   return (
@@ -57,8 +57,8 @@ const Scene = ({ initialAnimationCompleted, zone, setZone }) => {
 
         <Zones
           initialAnimationCompleted={initialAnimationCompleted}
-          zone={zone}
-          setZone={setZone}
+          focusedZone={focusedZone}
+          setFocusedZone={setFocusedZone}
         />
 
         {!initialAnimationCompleted && (

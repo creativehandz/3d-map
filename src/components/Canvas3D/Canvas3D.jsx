@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { useContext, useState } from "react";
 import CameraControls from "./CameraControls.jsx";
 
-const Canvas3D = ({ entered, zone, setZone }) => {
+const Canvas3D = ({ entered, focusedZone, setFocusedZone }) => {
   const mode = useContext(ModeContext);
   const { completed } = useContext(LoaderContext);
 
@@ -61,13 +61,13 @@ const Canvas3D = ({ entered, zone, setZone }) => {
 
           <CameraControls
             entered={entered}
-            zone={zone}
+            focusedZone={focusedZone}
             setInitialAnimationCompleted={setInitialAnimationCompleted}
           />
           <Scene
             initialAnimationCompleted={initialAnimationCompleted}
-            zone={zone}
-            setZone={setZone}
+            focusedZone={focusedZone}
+            setFocusedZone={setFocusedZone}
             entered={entered}
           />
         </Canvas>

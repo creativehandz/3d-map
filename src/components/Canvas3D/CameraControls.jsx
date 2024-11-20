@@ -18,7 +18,7 @@ const params = {
   limitNY: 12,
 };
 
-const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
+const CameraControls = ({ entered, focusedZone, setInitialAnimationCompleted }) => {
   const controlsRef = useRef();
   const previousZone = useRef();
   const savedPosition = useRef();
@@ -35,7 +35,7 @@ const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
     options.onStart = options.onStart || function () {};
     options.onComplete = options.onComplete || function () {};
     options.duration = options.duration || 1.2;
-    options.delay = options.delay || 0;
+    options.delay = options.delay || 0.4;
 
     let controls = controlsRef.current;
 
@@ -83,12 +83,15 @@ const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
   useEffect(() => {
     if (entered) {
       animateCamera(params.viewPosition, params.viewTarget, {
-        duration: 5,
+        duration: 2,
         delay: 0.4,
         onComplete: () => {
           controlsRef.current.target = new THREE.Vector3(-32, -154, -55);
           controlsRef.current.maxDistance = 1000;
-          setInitialAnimationCompleted(true);
+          controlsRef.current.maxPolarAngle = Math.PI * 0.4;
+          setTimeout(() => {
+            setInitialAnimationCompleted(true);
+          }, 200);
         },
       });
     }
@@ -110,67 +113,9 @@ const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
     });
   }, []);
 
-  // const animateCamera = (position, target, zoomOut = false) => {
-  //   let controls = controlsRef.current;
-
-  //   let initialPosition = camera.position.clone();
-  //   let initialDirection = new THREE.Vector3();
-  //   camera.getWorldDirection(initialDirection);
-  //   initialDirection.normalize().multiplyScalar(0.001);
-
-  //   let targetPosition = position.clone();
-  //   let targetDirection = new THREE.Vector3()
-  //     .subVectors(target, position)
-  //     .normalize()
-  //     .multiplyScalar(0.001);
-
-  //   let tl = gsap.timeline();
-
-  //   let animation = {
-  //     progress: 0,
-  //   };
-
-  //   tl.to(
-  //     animation,
-  //     {
-  //       progress: 1,
-  //       duration: 1.2,
-  //       delay: zoomOut ? 0.8 : 0,
-  //       onStart: () => {
-  //         controls.enabled = false;
-  //       },
-  //       onUpdate: () => {
-  //         let p = new THREE.Vector3().lerpVectors(
-  //           initialPosition,
-  //           targetPosition,
-  //           animation.progress
-  //         );
-  //         camera.position.copy(p);
-
-  //         let t = new THREE.Vector3()
-  //           .lerpVectors(initialDirection, targetDirection, animation.progress)
-  //           .normalize()
-  //           .multiplyScalar(0.001)
-  //           .add(camera.position);
-  //         camera.lookAt(t);
-  //         controls.target = t;
-  //       },
-  //       onComplete: () => {
-  //         // setTimeout(() => {
-  //         // }, 100);
-  //         if (zoomOut) {
-  //           controls.enabled = true;
-  //           controls.target = savedTarget.current;
-  //         }
-  //       },
-  //     },
-  //     "<"
-  //   );
-  // };
-
   useEffect(() => {
     let controls = controlsRef.current;
-    if (!zone) {
+    if (!focusedZone) {
       previousZone.current = null;
       if (savedPosition.current && savedTarget.current) {
         animateCamera(savedPosition.current, savedTarget.current, {
@@ -187,9 +132,9 @@ const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
       savedPosition.current = camera.position.clone();
       savedTarget.current = controls.target.clone();
     }
-    animateCamera(zone.camera, zone.target);
-    previousZone.current = zone.name;
-  }, [zone]);
+    animateCamera(focusedZone.camera, focusedZone.target);
+    previousZone.current = focusedZone.name;
+  }, [focusedZone]);
 
   return (
     <>
@@ -200,10 +145,10 @@ const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
         // maxPolarAngle={Math.PI * 0.26}
         panSpeed={0.4}
         rotateSpeed={0.4}
-        // maxDistance={1000}
         zoomSpeed={0.3}
       />
     </>
   );
 };
+
 export default CameraControls;
