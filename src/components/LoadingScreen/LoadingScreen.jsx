@@ -101,6 +101,14 @@ const LoadingScreen = ({ setEntered }) => {
             className="absolute top-3/4 -translate-y-1/2 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
             ref={indicator}
           >
+              {/* Logo */}
+              <img src="./public/logo.jpeg" alt="Logo" className="w-20 h-20" />
+
+            {/* Text */}
+            <p className="text-white text-xl font-medium">Building Visions,
+              Shaping The Future
+              Innovating Tomorrow, Sustainably Today</p>
+
             <div className="relative hover:scale-105 transition">
               <button
                 ref={button}
