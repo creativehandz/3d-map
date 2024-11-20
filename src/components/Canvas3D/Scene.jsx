@@ -66,7 +66,7 @@ const Scene = ({ initialAnimationCompleted, zone, setZone }) => {
                   <Cloud
                     key={index}
                     segments={6}
-                    bounds={[400, 100, 400]}
+                    bounds={[400, 200, 400]}
                     scale={[2, 2, 2]}
                     volume={1000}
                     position={[

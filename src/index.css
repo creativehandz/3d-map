@@ -7,7 +7,7 @@ body {
 }
 
 #kenburn-img {
-  animation: kenburn 80s ease infinite;
+  animation: kenburn 120s ease infinite;
 }
 
 @keyframes kenburn {

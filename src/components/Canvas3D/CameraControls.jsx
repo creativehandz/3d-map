@@ -83,38 +83,32 @@ const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
   useEffect(() => {
     if (entered) {
       animateCamera(params.viewPosition, params.viewTarget, {
-        duration: 3,
+        duration: 5,
         delay: 0.4,
         onComplete: () => {
           controlsRef.current.target = new THREE.Vector3(-32, -154, -55);
+          controlsRef.current.maxDistance = 1000;
           setInitialAnimationCompleted(true);
         },
       });
     }
   }, [entered]);
 
-  // useEffect(() => {
-  //   let controls = controlsRef.current;
-  //   let initialDirection = new THREE.Vector3().subVectors(
-  //     params.controlsTarget,
-  //     params.cameraPosition
-  //   );
+  useEffect(() => {
+    let controls = controlsRef.current;
 
-  //   camera.position.copy(params.cameraPosition);
-  //   controls.target = params.controlsTarget;
+    controls.addEventListener("change", () => {
+      if (!controls.enabled) {
+        return;
+      }
+      camera.position.x = Math.min(params.limitPX, Math.max(params.limitNX, camera.position.x));
+      camera.position.y = Math.max(params.limitNY, camera.position.y);
+      camera.position.z = Math.min(params.limitPZ, Math.max(params.limitNZ, camera.position.z));
 
-  //   controls.addEventListener("change", () => {
-  //     if (!controls.enabled) {
-  //       return;
-  //     }
-  //     camera.position.x = Math.min(params.limitPX, Math.max(params.limitNX, camera.position.x));
-  //     camera.position.y = Math.max(params.limitNY, camera.position.y);
-  //     camera.position.z = Math.min(params.limitPZ, Math.max(params.limitNZ, camera.position.z));
-
-  //     controls.target.x = Math.min(params.limitPX, Math.max(params.limitNX, controls.target.x));
-  //     controls.target.z = Math.min(params.limitPZ, Math.max(params.limitNZ, controls.target.z));
-  //   });
-  // }, []);
+      controls.target.x = Math.min(params.limitPX, Math.max(params.limitNX, controls.target.x));
+      controls.target.z = Math.min(params.limitPZ, Math.max(params.limitNZ, controls.target.z));
+    });
+  }, []);
 
   // const animateCamera = (position, target, zoomOut = false) => {
   //   let controls = controlsRef.current;
@@ -174,27 +168,28 @@ const CameraControls = ({ entered, zone, setInitialAnimationCompleted }) => {
   //   );
   // };
 
-  // useEffect(() => {
-  //   console.log(entered);
-  // }, [entered]);
+  useEffect(() => {
+    let controls = controlsRef.current;
+    if (!zone) {
+      previousZone.current = null;
+      if (savedPosition.current && savedTarget.current) {
+        animateCamera(savedPosition.current, savedTarget.current, {
+          onComplete: () => {
+            controls.enabled = true;
+            controls.target = savedTarget.current;
+          },
+        });
+      }
+      return;
+    }
 
-  // useEffect(() => {
-  //   let controls = controlsRef.current;
-  //   if (!zone) {
-  //     previousZone.current = null;
-  //     if (savedPosition.current && savedTarget.current) {
-  //       animateCamera(savedPosition.current, savedTarget.current, true);
-  //     }
-  //     return;
-  //   }
-
-  //   if (!previousZone.current) {
-  //     savedPosition.current = camera.position.clone();
-  //     savedTarget.current = controls.target.clone();
-  //   }
-  //   animateCamera(zone.camera, zone.target);
-  //   previousZone.current = zone.name;
-  // }, [zone]);
+    if (!previousZone.current) {
+      savedPosition.current = camera.position.clone();
+      savedTarget.current = controls.target.clone();
+    }
+    animateCamera(zone.camera, zone.target);
+    previousZone.current = zone.name;
+  }, [zone]);
 
   return (
     <>

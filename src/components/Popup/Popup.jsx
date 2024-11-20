@@ -44,7 +44,7 @@ const Popup = ({ zone, setZone }) => {
     <div
       id="popup"
       ref={popupRef}
-      className="fixed inset-16 bg-green-50 rounded-2xl grid grid-cols-3 gap-4 p-4 shadow-xl scale-0 pointer-events-none hidden"
+      className="fixed inset-16 bg-green-50 rounded-2xl grid grid-cols-3 gap-4 p-4 shadow-xl scale-0 pointer-events-none"
     >
       {/* Image */}
       <div className="col-span-2 rounded-2xl overflow-hidden shadow-md">
