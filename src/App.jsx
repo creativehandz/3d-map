@@ -18,7 +18,7 @@ const App = () => {
 
             {/* <LoadingScreen /> */}
 
-            {/* <Popup /> */}
+            <Popup />
 
             <ZoneSlider />
           </div>

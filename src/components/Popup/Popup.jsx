@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap/all";
 
-const Popup = ({ focusedZone, setFocusedZone }) => {
+const Popup = () => {
+  const { zoneInfo, currentZone, setCurrentZone } = useContext(GlobalContext);
+
   const popupRef = useRef();
   const toggleTl = useRef();
+  const titleRef = useRef();
 
   const [active, setActive] = useState(false);
 
@@ -25,26 +29,19 @@ const Popup = ({ focusedZone, setFocusedZone }) => {
   useEffect(() => {
     let tl = toggleTl.current;
 
-    if (active) {
+    if (currentZone != -1 && currentZone != null) {
       tl.play();
+      titleRef.current.innerText = zoneInfo.current[currentZone].name;
     } else {
       tl.reverse();
     }
-  }, [active]);
-
-  useEffect(() => {
-    if (focusedZone) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
-  }, [focusedZone]);
+  }, [currentZone]);
 
   return (
     <div
       id="popup"
       ref={popupRef}
-      className="fixed inset-16 bg-green-50 rounded-2xl grid grid-cols-3 gap-4 p-4 shadow-xl scale-0 pointer-events-none"
+      className="fixed inset-64 top-32 bottom-64 bg-green-50 rounded-2xl grid grid-cols-3 gap-4 p-4 shadow-xl scale-0 pointer-events-none z-50"
     >
       {/* Image */}
       <div className="col-span-2 rounded-2xl overflow-hidden shadow-md">
@@ -53,7 +50,10 @@ const Popup = ({ focusedZone, setFocusedZone }) => {
 
       {/* Text */}
       <div className="flex flex-col gap-4 justify-center px-4 relative">
-        <h1 className="text-5xl font-bold tracking-tighter drop-shadow-md text-green-900">
+        <h1
+          className="text-5xl font-bold tracking-tighter drop-shadow-md text-green-900"
+          ref={titleRef}
+        >
           Zone Name
         </h1>
 
@@ -74,7 +74,7 @@ const Popup = ({ focusedZone, setFocusedZone }) => {
           className="bg-red-200 px-4 py-1 rounded-full font-light text-gray-700 hover:scale-105 transition hover:bg-red-300 absolute bottom-4 right-4"
           onClick={() => {
             setActive(false);
-            setFocusedZone(null);
+            setCurrentZone(-1);
           }}
         >
           Close
