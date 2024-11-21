@@ -18,7 +18,6 @@ const Navbar = () => {
           Project Overview
           </button>
         </Link>
-       
       </nav>
     );
   };
