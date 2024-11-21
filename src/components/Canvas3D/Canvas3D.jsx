@@ -44,7 +44,7 @@ const Canvas3D = () => {
   });
 
   return (
-    <div className="fixed inset-0">
+    <div className="fixed inset-0 bg-[#052424]">
       {initialized && (
         <Canvas
           gl={{
