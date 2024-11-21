@@ -5,18 +5,21 @@ const Header = () => {
         {/* Logo */}
         <div>
           <a href="/" className="text-4xl">
-            Logo
+            <img src="./ibtec-logo-t.png" className="w-24" />
           </a>
         </div>
 
         {/* Links */}
         <ul className="flex items-center justify-end gap-6 text-2xl font-light">
           <li className="p-2 cursor-pointer">
-            <a href="/page-one">PageOne</a>
+            <a href="/page-one">Gallery</a>
           </li>
 
           <li className="p-2 cursor-pointer">
-            <a href="/page-two">PageTwo</a>
+            <a href="/page-two">Investor Relation</a>
+          </li>
+          <li className="p-2 cursor-pointer">
+            <a href="/page-three">Project Overview</a>
           </li>
         </ul>
       </nav>

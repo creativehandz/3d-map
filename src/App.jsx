@@ -10,6 +10,7 @@ import Footer from "./common/Footer/Footer.jsx";
 import { Routes, Route } from "react-router-dom";
 import PageOne from "./routes/PageOne/PageOne.jsx";
 import PageTwo from "./routes/PageTwo/PageTwo.jsx";
+import PageThree from "./routes/PageThree/PageThree.jsx";
 
 const App = () => {
   const [focusedZone, setFocusedZone] = useState();
@@ -41,6 +42,8 @@ const App = () => {
             <Route path="/page-one" element={<PageOne />} />
 
             <Route path="/page-two" element={<PageTwo />} />
+
+            <Route path="/page-three" element={<PageThree />} />
           </Routes>
           <Footer />
         </div>
