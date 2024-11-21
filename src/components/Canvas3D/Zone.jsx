@@ -1,31 +1,87 @@
 import { GlobalContext } from "src/contexts/GlobalContext.jsx";
+import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import gsap from "gsap/all";
 import { Html, Text } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { useCallback, useEffect, useContext, useRef, useState } from "react";
+import { useCallback, useEffect, useContext, useRef, useState, useMemo } from "react";
 
-const Zone = ({ id, geometry }) => {
-  const { zoneInfo, setCurrentZone, started, animating } = useContext(GlobalContext);
+const Zone = ({ id, geometry, position }) => {
+  const { currentZone, setCurrentZone, started, animating } = useContext(GlobalContext);
+  const { getTexture } = useContext(LoaderContext);
+
+  const { controls } = useThree();
+  const meshRef = useRef();
+
+  const tlRef = useRef();
 
   useEffect(() => {
-    // console.log(id, geometry);
+    let tl = gsap.timeline().reverse().pause();
+
+    tl.to(meshRef.current.material, {
+      opacity: 0.4,
+    });
+
+    tlRef.current = tl;
   }, []);
 
-  // const meshRef = useRef();
+  const markerRef = useRef();
+
+  useEffect(() => {
+    let marker = markerRef.current;
+    let p = position.clone();
+
+    marker.position.copy(p);
+    marker.position.applyMatrix4(marker.parent.matrixWorld.clone().invert());
+    marker.position.y = 32;
+  }, []);
+
+  // useEffect(() => {
+  //   let update = () => {
+  //     let markerPosition = position.clone();
+
+  //     let cameraPosition = controls.object.position.clone();
+  //     cameraPosition.y = markerPosition.y;
+
+  //     markerRef.current.lookAt(cameraPosition);
+  //   };
+
+  //   update();
+
+  //   controls.addEventListener("change", update);
+
+  //   return () => {
+  //     controls.removeEventListener("change", update);
+  //   };
+  // }, [controls]);
+
+  useFrame(({ clock }) => {
+    let markerPosition = position.clone();
+    markerRef.current.position.y = 32 + Math.sin(clock.getElapsedTime() * 1.8) * 4;
+
+    let cameraPosition = controls.object.position.clone();
+    cameraPosition.y = markerPosition.y;
+
+    markerRef.current.lookAt(cameraPosition);
+  });
+
+  useEffect(() => {
+    if (!tlRef.current) {
+      return;
+    }
+
+    if (currentZone == id) {
+      tlRef.current.play();
+    } else {
+      tlRef.current.reverse();
+    }
+  }, [currentZone]);
+
   // const indicatorRef = useRef();
   // const textRef = useRef();
   // const lineRef = useRef();
 
   // // Setting indicator's world coordinates
-  // useEffect(() => {
-  //   let indicator = indicatorRef.current;
-  //   let p = target.clone();
-
-  //   indicator.position.copy(p);
-  //   indicator.position.applyMatrix4(indicator.parent.matrixWorld.clone().invert());
-  //   indicator.position.y = 40;
-  // }, []);
 
   // // Timelines
   // const hoverTl = useRef();
@@ -83,7 +139,10 @@ const Zone = ({ id, geometry }) => {
     }
 
     document.body.style.cursor = "pointer";
-  }, [started]);
+    if (currentZone != id) {
+      tlRef.current.play();
+    }
+  }, [started, currentZone]);
 
   const onPointerLeave = useCallback(() => {
     if (!started) {
@@ -91,7 +150,10 @@ const Zone = ({ id, geometry }) => {
     }
 
     document.body.style.cursor = "auto";
-  }, [started]);
+    if (currentZone != id) {
+      tlRef.current.reverse();
+    }
+  }, [started, currentZone]);
 
   const onClick = useCallback(() => {
     if (!started || animating.current) {
@@ -116,28 +178,43 @@ const Zone = ({ id, geometry }) => {
   // // Updating rotation
   // const { controls } = useThree();
 
-  // useEffect(() => {
-  //   let update = () => {
-  //     let indicatorPosition = target.clone();
-
-  //     let cameraPosition = controls.object.position.clone();
-  //     cameraPosition.y = indicatorPosition.y;
-
-  //     indicatorRef.current.lookAt(cameraPosition);
-  //   };
-
-  //   update();
-
-  //   controls.addEventListener("change", update);
-
-  //   return () => {
-  //     controls.removeEventListener("change", update);
-  //   };
-  // }, [controls]);
-
   return (
-    <>
-      {/* <mesh
+    <group>
+      <mesh
+        ref={meshRef}
+        geometry={geometry}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+        onClick={onClick}
+        renderOrder={10}
+      >
+        <meshBasicMaterial
+          color={0x64dc96}
+          transparent
+          opacity={0}
+          depthTest={false}
+          depthWrite={false}
+        />
+      </mesh>
+
+      <mesh ref={markerRef} renderOrder={20}>
+        <planeGeometry args={[40, 40]} />
+        <meshBasicMaterial
+          color={0x64dc96}
+          alphaMap={getTexture("marker")}
+          transparent
+          depthTest={false}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+};
+export default Zone;
+
+{
+  /* <mesh
         ref={meshRef}
         geometry={geometry}
         onPointerEnter={onPointerEnter}
@@ -170,17 +247,5 @@ const Zone = ({ id, geometry }) => {
           <boxGeometry args={[1, 36, 1]} />
           <meshBasicMaterial transparent depthTest={false} />
         </mesh>
-      </group> */}
-
-      <mesh
-        geometry={geometry}
-        onPointerEnter={onPointerEnter}
-        onPointerLeave={onPointerLeave}
-        onClick={onClick}
-      >
-        <meshBasicMaterial transparent opacity={0.2} depthTest={false} />
-      </mesh>
-    </>
-  );
-};
-export default Zone;
+      </group> */
+}

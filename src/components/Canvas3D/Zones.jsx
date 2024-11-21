@@ -95,7 +95,9 @@ const Zones = () => {
 
       <group>
         {list.map((zone) => {
-          return <Zone key={zone.id} id={zone.id} geometry={zone.geometry} />;
+          return (
+            <Zone key={zone.id} id={zone.id} geometry={zone.geometry} position={zone.target} />
+          );
         })}
       </group>
     </>
