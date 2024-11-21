@@ -1,153 +1,223 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
+import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import gsap from "gsap/all";
 import { Html, Text } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
+import { useCallback, useEffect, useContext, useRef, useState, useMemo } from "react";
 
-const zoneNames = {
-  _00Zone: "GrowTopia",
-  _01Zone: "Exponent",
-  _02Zone: "StepWest",
-  _03Zone: "StepEast",
-  _04Zone: "Exclaim",
-  _05Zone: "Ampersand",
-  _06Zone: "Tilde",
-  _07Zone: "Hash",
-  _08Zone: "Asterisk",
-};
+const Zone = ({ id, geometry, position }) => {
+  const { currentZone, setCurrentZone, started, animating, setShowPopup } =
+    useContext(GlobalContext);
+  const { getTexture } = useContext(LoaderContext);
 
-const Zone = ({ name, geometry, target, info, focusedZone, setFocusedZone }) => {
+  const { controls } = useThree();
   const meshRef = useRef();
-  const indicatorRef = useRef();
-  const textRef = useRef();
-  const lineRef = useRef();
 
-  // Setting indicator's world coordinates
-  useEffect(() => {
-    let indicator = indicatorRef.current;
-    let p = target.clone();
-
-    indicator.position.copy(p);
-    indicator.position.applyMatrix4(indicator.parent.matrixWorld.clone().invert());
-    indicator.position.y = 40;
-  }, []);
-
-  // Timelines
-  const hoverTl = useRef();
+  const tlRef = useRef();
 
   useEffect(() => {
-    let material = meshRef.current.material;
+    let tl = gsap.timeline().reverse().pause();
 
-    let hTl = gsap.timeline().pause().reverse();
-    hoverTl.current = hTl;
-    let duration = 0.6;
+    tl.to(meshRef.current.material, {
+      opacity: 0.4,
+    });
 
-    hTl.fromTo(
-      material,
-      { opacity: 0 },
-      {
-        opacity: 0.4,
-        duration,
-      }
-    );
-
-    hTl.to(
-      textRef.current.material,
-      {
-        opacity: 1,
-        duration,
-      },
-      "<"
-    );
-
-    hTl.from(
-      textRef.current.position,
-      {
-        y: 40,
-        duration,
-      },
-      "<"
-    );
-
-    hTl.to(
-      lineRef.current.scale,
-      {
-        y: 1,
-        duration,
-      },
-      "<"
-    );
+    tlRef.current = tl;
   }, []);
 
-  // Event handlers
-  const [status, setStatus] = useState("default");
+  const markerRef = useRef();
+
+  useEffect(() => {
+    let marker = markerRef.current;
+    let p = position.clone();
+
+    marker.position.copy(p);
+    marker.position.applyMatrix4(marker.parent.matrixWorld.clone().invert());
+    marker.position.y = 32;
+  }, []);
+
+  // useEffect(() => {
+  //   let update = () => {
+  //     let markerPosition = position.clone();
+
+  //     let cameraPosition = controls.object.position.clone();
+  //     cameraPosition.y = markerPosition.y;
+
+  //     markerRef.current.lookAt(cameraPosition);
+  //   };
+
+  //   update();
+
+  //   controls.addEventListener("change", update);
+
+  //   return () => {
+  //     controls.removeEventListener("change", update);
+  //   };
+  // }, [controls]);
+
+  useFrame(({ clock }) => {
+    let markerPosition = position.clone();
+
+    let cameraPosition = controls.object.position.clone();
+    cameraPosition.y = markerPosition.y;
+
+    markerRef.current.lookAt(cameraPosition);
+    markerRef.current.position.y = 32 + Math.sin(clock.getElapsedTime() * 1.8) * 4;
+  });
+
+  useEffect(() => {
+    if (!tlRef.current) {
+      return;
+    }
+
+    if (currentZone == id) {
+      tlRef.current.play();
+    } else {
+      tlRef.current.reverse();
+    }
+  }, [currentZone]);
+
+  // const indicatorRef = useRef();
+  // const textRef = useRef();
+  // const lineRef = useRef();
+
+  // // Setting indicator's world coordinates
+
+  // // Timelines
+  // const hoverTl = useRef();
+
+  // useEffect(() => {
+  //   let material = meshRef.current.material;
+
+  //   let hTl = gsap.timeline().pause().reverse();
+  //   hoverTl.current = hTl;
+  //   let duration = 0.6;
+
+  //   hTl.fromTo(
+  //     material,
+  //     { opacity: 0 },
+  //     {
+  //       opacity: 0.4,
+  //       duration,
+  //     }
+  //   );
+
+  //   hTl.to(
+  //     textRef.current.material,
+  //     {
+  //       opacity: 1,
+  //       duration,
+  //     },
+  //     "<"
+  //   );
+
+  //   hTl.from(
+  //     textRef.current.position,
+  //     {
+  //       y: 40,
+  //       duration,
+  //     },
+  //     "<"
+  //   );
+
+  //   hTl.to(
+  //     lineRef.current.scale,
+  //     {
+  //       y: 1,
+  //       duration,
+  //     },
+  //     "<"
+  //   );
+  // }, []);
+
+  // // Event handlers
+  // const [status, setStatus] = useState("default");
 
   const onPointerEnter = useCallback(() => {
-    if (focusedZone) {
+    if (!started) {
       return;
     }
 
     document.body.style.cursor = "pointer";
-    setStatus("hovered");
-  }, [focusedZone]);
+    if (currentZone != id) {
+      tlRef.current.play();
+    }
+  }, [started, currentZone]);
 
   const onPointerLeave = useCallback(() => {
-    if (focusedZone) {
+    if (!started) {
       return;
     }
 
     document.body.style.cursor = "auto";
-    setStatus("default");
-  }, [focusedZone]);
+    if (currentZone != id) {
+      tlRef.current.reverse();
+    }
+  }, [started, currentZone]);
 
   const onClick = useCallback(() => {
-    if (focusedZone) {
+    if (!started || animating.current) {
       return;
     }
 
-    hoverTl.current.reverse();
-    setFocusedZone(info);
-  }, [focusedZone]);
+    setCurrentZone(id);
+    setShowPopup(true);
+  }, [started]);
 
-  useEffect(() => {
-    switch (status) {
-      case "default":
-        hoverTl.current.reverse();
-        break;
+  // useEffect(() => {
+  //   switch (status) {
+  //     case "default":
+  //       hoverTl.current.reverse();
+  //       break;
 
-      case "hovered":
-        hoverTl.current.play();
-        break;
-    }
-  }, [status]);
+  //     case "hovered":
+  //       hoverTl.current.play();
+  //       break;
+  //   }
+  // }, [status]);
 
-  // Updating rotation
-  const { controls } = useThree();
-
-  useEffect(() => {
-    let update = () => {
-      let indicatorPosition = target.clone();
-
-      let cameraPosition = controls.object.position.clone();
-      cameraPosition.y = indicatorPosition.y;
-
-      indicatorRef.current.lookAt(cameraPosition);
-    };
-
-    update();
-
-    controls.addEventListener("change", update);
-
-    return () => {
-      controls.removeEventListener("change", update);
-    };
-  }, [controls]);
+  // // Updating rotation
+  // const { controls } = useThree();
 
   return (
-    <>
+    <group>
       <mesh
         ref={meshRef}
-        userData={{ name }}
+        geometry={geometry}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+        onClick={onClick}
+        renderOrder={10}
+      >
+        <meshBasicMaterial
+          color={0x64dc96}
+          transparent
+          opacity={0}
+          depthTest={false}
+          depthWrite={false}
+        />
+      </mesh>
+
+      <mesh ref={markerRef} renderOrder={20}>
+        <planeGeometry args={[40, 40]} />
+        <meshBasicMaterial
+          color={0x64dc96}
+          alphaMap={getTexture("marker")}
+          transparent
+          depthTest={false}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+};
+export default Zone;
+
+{
+  /* <mesh
+        ref={meshRef}
         geometry={geometry}
         onPointerEnter={onPointerEnter}
         onPointerLeave={onPointerLeave}
@@ -165,7 +235,7 @@ const Zone = ({ name, geometry, target, info, focusedZone, setFocusedZone }) => 
 
       <group ref={indicatorRef}>
         <Text ref={textRef} fontSize={30} textAlign="center" position-y={20} renderOrder={5}>
-          {zoneNames[name]}
+          ZoneName
           <meshBasicMaterial
             depthWrite={false}
             depthTest={false}
@@ -179,8 +249,5 @@ const Zone = ({ name, geometry, target, info, focusedZone, setFocusedZone }) => 
           <boxGeometry args={[1, 36, 1]} />
           <meshBasicMaterial transparent depthTest={false} />
         </mesh>
-      </group>
-    </>
-  );
-};
-export default Zone;
+      </group> */
+}

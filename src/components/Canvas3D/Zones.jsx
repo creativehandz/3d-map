@@ -1,3 +1,4 @@
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import gsap from "gsap/all";
 import * as THREE from "three";
@@ -5,35 +6,22 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
 import Zone from "./Zone";
 
-const Zones = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
+const Zones = () => {
+  const { zoneInfo } = useContext(GlobalContext);
   const { assets } = useContext(LoaderContext);
 
   // Setting zone list
-  const [zoneList, setZoneList] = useState({});
+  const [list, setList] = useState([]);
+
   useEffect(() => {
     let list = {};
 
     let zoneMeshes = assets.gltf.zones.scene;
 
     zoneMeshes.traverse((node) => {
-      let material = new THREE.MeshBasicMaterial({
-        color: 0x54c786,
-        transparent: true,
-        opacity: 0,
-        depthTest: false,
-      });
-
-      let hoverTl = gsap.timeline().reverse().pause();
-      hoverTl.to(material, {
-        opacity: 0.6,
-      });
-
       if (node.name.slice(-4) == "Zone") {
         list[node.name] = {
-          name: node.name,
           geometry: node.geometry,
-          material,
-          hoverTl,
           camera: 0,
           target: 0,
         };
@@ -55,49 +43,25 @@ const Zones = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
       list[zoneName][type] = p;
     });
 
-    setZoneList(list);
+    let updated = [];
+
+    zoneInfo.current.forEach((zone) => {
+      updated.push({ ...zone, ...list[zone.meshName] });
+    });
+
+    zoneInfo.current = updated;
+    setList(updated);
   }, []);
-
-  const { camera, controls, raycaster, pointer, scene } = useThree();
-  const groupRef = useRef();
-
-  // const zoomOut = useCallback(() => {
-  //   if (focusedZone) {
-  //     return;
-  //   }
-  //   raycaster.setFromCamera(pointer, camera);
-  //   let intersects = raycaster.intersectObjects(groupRef.current.children);
-  //   if (intersects.length == 0) {
-  //     setFocusedZone(null);
-  //     return;
-  //   }
-  // }, [focusedZone]);
-
-  // useEffect(() => {
-  //   window.addEventListener("click", zoomOut);
-
-  //   return () => {
-  //     window.removeEventListener("click", zoomOut);
-  //   };
-  // }, [zoomOut]);
 
   return (
     <>
-      {initialAnimationCompleted && (
-        <group ref={groupRef}>
-          {Object.entries(zoneList).map(([name, zone]) => {
-            return (
-              <Zone
-                key={name}
-                info={zone}
-                {...zone}
-                focusedZone={focusedZone}
-                setFocusedZone={setFocusedZone}
-              />
-            );
-          })}
-        </group>
-      )}
+      <group>
+        {list.map((zone) => {
+          return (
+            <Zone key={zone.id} id={zone.id} geometry={zone.geometry} position={zone.target} />
+          );
+        })}
+      </group>
     </>
   );
 };

@@ -1,9 +1,11 @@
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import { ModeContext } from "src/contexts/ModeContext.jsx";
 import { useContext, useEffect, useRef, useState, useMemo } from "react";
 import gsap from "gsap/all";
 
-const LoadingScreen = ({ setEntered }) => {
+const LoadingScreen = () => {
+  const { setInitialized } = useContext(GlobalContext);
   const mode = useContext(ModeContext);
   const { progress, completed } = useContext(LoaderContext);
   const [animationCompleted, setAnimationCompleted] = useState(false);
@@ -19,7 +21,7 @@ const LoadingScreen = ({ setEntered }) => {
   useEffect(() => {
     if (mode == "DEV") {
       hideTl.current.play();
-      setEntered(true);
+      setInitialized(true);
       return;
     }
 
@@ -77,7 +79,7 @@ const LoadingScreen = ({ setEntered }) => {
 
   const onEnter = () => {
     hideTl.current.play();
-    setEntered(true);
+    setInitialized(true);
   };
 
   return (
@@ -96,57 +98,45 @@ const LoadingScreen = ({ setEntered }) => {
             />
             <div className="absolute inset-0 bg-black opacity-10 pointer-events-none"></div>
           </div>
-          <div
-              id="loading"
-              className=" inset-0 z-[100] w-full"
-              ref={container}
-            >
-              <div className="grid grid-cols-1 gap-5 place-items-center w-full py-24 px-24">
-              <img
-                src="./ibtec-logo-t.png"
-                alt="Logo"
-                className="w-52 h-auto mt-8"
-              />
+          <div id="loading" className=" inset-0 z-[100] w-full" ref={container}>
+            <div className="grid grid-cols-1 gap-5 place-items-center w-full py-24 px-24">
+              <img src="./ibtec-logo-t.png" alt="Logo" className="w-52 h-auto mt-8" />
               <p className="text-white text-6xl font-light text-center font">
-                Building Visions,
-                Shaping The Future<br></br>
+                Building Visions, Shaping The Future<br></br>
                 Innovating Tomorrow, Sustainably Today
               </p>
-              </div>
-              
+            </div>
 
-              <div className="flex-1 flex items-center justify-center text-center">
-                
-              </div>
-              <div
-            className="absolute inset-0 bg-repeat z-10 pointer-events-none"
-            style={{
-              backgroundImage: "url('/cloud-overlay.png')",
-              animation: "cloudLoop 80s linear infinite",
-              backgroundSize: "cover",
-              backgroundPosition: "center bottom",
-            }}
-          ></div>
-              <div
-                className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
-                ref={indicator}
+            <div className="flex-1 flex items-center justify-center text-center"></div>
+            <div
+              className="absolute inset-0 bg-repeat z-10 pointer-events-none"
+              style={{
+                backgroundImage: "url('/cloud-overlay.png')",
+                animation: "cloudLoop 80s linear infinite",
+                backgroundSize: "cover",
+                backgroundPosition: "center bottom",
+              }}
+            ></div>
+            <div
+              className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
+              ref={indicator}
+            >
+              <button
+                ref={button}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full text-white px-6 py-1 rounded-full text-6xl font-medium drop-shadow-lg pointer-events-none opacity-0 scale-0 cursor-pointer"
+                onClick={onEnter}
               >
-                <button
-                  ref={button}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full text-white px-6 py-1 rounded-full text-6xl font-medium drop-shadow-lg pointer-events-none opacity-0 scale-0 cursor-pointer"
-                  onClick={onEnter}
-                >
-                  Enter
-                </button>
+                Enter
+              </button>
 
-                <div className="h-6 border-2 shadow-xl container mx-auto bg-transparent relative opacity-0">
-                  <div
-                    ref={line}
-                    className="absolute top-0 left-0 h-full origin-left w-full bg-white scale-x-0"
-                  ></div>
-                </div>
+              <div className="h-6 border-2 shadow-xl container mx-auto bg-transparent relative opacity-0">
+                <div
+                  ref={line}
+                  className="absolute top-0 left-0 h-full origin-left w-full bg-white scale-x-0"
+                ></div>
               </div>
             </div>
+          </div>
         </div>
       )}
     </>

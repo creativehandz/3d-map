@@ -1,7 +1,8 @@
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 import { OrbitControls } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
-import { useEffect, useRef, useCallback } from "react";
 import * as THREE from "three";
+import { useContext, useEffect, useRef, useCallback } from "react";
 import gsap from "gsap/all";
 
 const params = {
@@ -18,20 +19,25 @@ const params = {
   limitNY: 12,
 };
 
-const CameraControls = ({ entered, focusedZone, setInitialAnimationCompleted }) => {
+const CameraControls = () => {
+  const {
+    zoneInfo,
+    currentZone,
+    setCurrentZone,
+    setStarted,
+    animating,
+    showPopup,
+    setShowPopup,
+  } = useContext(GlobalContext);
+
   const controlsRef = useRef();
-  const previousZone = useRef();
-  const savedPosition = useRef();
-  const savedTarget = useRef();
+  // const previousZone = useRef();
+  // const savedPosition = useRef();
+  // const savedTarget = useRef();
 
   const { camera } = useThree();
-  useEffect(() => {
-    camera.position.copy(params.initialPosition);
-    camera.lookAt(params.initialTarget);
-    controlsRef.current.target = params.initialTarget;
-  }, []);
 
-  const animateCamera = (position, target, options = {}) => {
+  const animateCamera = (to, view, options = {}) => {
     options.onStart = options.onStart || function () {};
     options.onComplete = options.onComplete || function () {};
     options.duration = options.duration || 1.2;
@@ -40,12 +46,12 @@ const CameraControls = ({ entered, focusedZone, setInitialAnimationCompleted }) 
     let controls = controlsRef.current;
 
     let p0 = camera.position.clone();
-    let t0 = new THREE.Vector3();
-    camera.getWorldDirection(t0);
-    t0.normalize().multiplyScalar(0.001);
+    let v0 = new THREE.Vector3();
+    camera.getWorldDirection(v0);
+    v0.normalize().multiplyScalar(0.001);
 
-    let p1 = position.clone();
-    let t1 = new THREE.Vector3().subVectors(target, position).normalize().multiplyScalar(0.001);
+    let p1 = to.clone();
+    let v1 = new THREE.Vector3().subVectors(view, to).normalize().multiplyScalar(0.001);
 
     let tl = gsap.timeline();
 
@@ -53,10 +59,14 @@ const CameraControls = ({ entered, focusedZone, setInitialAnimationCompleted }) 
       progress: 0,
     };
 
+    options.delay == p1.distanceTo(p0) < 10 ? 0 : options.duration;
+    options.duration == p1.distanceTo(p0) < 10 ? 0.1 : options.duration;
+
     tl.to(animation, {
       progress: 1,
       duration: options.duration,
       delay: options.delay,
+
       onStart: () => {
         options.onStart();
       },
@@ -65,76 +75,189 @@ const CameraControls = ({ entered, focusedZone, setInitialAnimationCompleted }) 
         let p = new THREE.Vector3().lerpVectors(p0, p1, animation.progress);
         camera.position.copy(p);
 
-        let t = new THREE.Vector3()
-          .lerpVectors(t0, t1, animation.progress)
+        let v = new THREE.Vector3()
+          .lerpVectors(v0, v1, animation.progress)
           .normalize()
           .multiplyScalar(0.001)
           .add(camera.position);
-        camera.lookAt(t);
-        controls.target = t;
+        camera.lookAt(v);
+        controls.target = v;
       },
 
       onComplete: () => {
+        controls.target = view;
         options.onComplete();
       },
     });
   };
 
   useEffect(() => {
-    if (entered) {
-      animateCamera(params.viewPosition, params.viewTarget, {
-        duration: 5,
-        delay: 0.4,
-        onComplete: () => {
-          controlsRef.current.target = new THREE.Vector3(-32, -154, -55);
-          controlsRef.current.maxDistance = 1000;
-          controlsRef.current.maxPolarAngle = Math.PI * 0.4;
-          setTimeout(() => {
-            setInitialAnimationCompleted(true);
-          }, 200);
-        },
-      });
-    }
-  }, [entered]);
-
-  useEffect(() => {
     let controls = controlsRef.current;
 
-    controls.addEventListener("change", () => {
-      if (!controls.enabled) {
-        return;
-      }
-      camera.position.x = Math.min(params.limitPX, Math.max(params.limitNX, camera.position.x));
-      camera.position.y = Math.max(params.limitNY, camera.position.y);
-      camera.position.z = Math.min(params.limitPZ, Math.max(params.limitNZ, camera.position.z));
+    camera.position.copy(params.initialPosition);
+    camera.lookAt(params.initialTarget);
+    controls.target = params.initialTarget;
 
-      controls.target.x = Math.min(params.limitPX, Math.max(params.limitNX, controls.target.x));
-      controls.target.z = Math.min(params.limitPZ, Math.max(params.limitNZ, controls.target.z));
+    let addListeners = () => {
+      controls.addEventListener("change", () => {
+        if (!controls.enabled) {
+          return;
+        }
+
+        camera.position.x = Math.min(
+          params.limitPX,
+          Math.max(params.limitNX, camera.position.x)
+        );
+        camera.position.y = Math.max(params.limitNY, camera.position.y);
+        camera.position.z = Math.min(
+          params.limitPZ,
+          Math.max(params.limitNZ, camera.position.z)
+        );
+
+        controls.target.x = Math.min(
+          params.limitPX,
+          Math.max(params.limitNX, controls.target.x)
+        );
+        controls.target.z = Math.min(
+          params.limitPZ,
+          Math.max(params.limitNZ, controls.target.z)
+        );
+      });
+    };
+
+    animateCamera(params.viewPosition, params.viewTarget, {
+      delay: 0.4,
+      duration: 5,
+
+      onStart: () => {
+        controls.enabled = false;
+      },
+
+      onComplete: () => {
+        controls.enabled = true;
+        controls.target = params.viewTarget;
+        controls.maxPolarAngle = Math.PI * 0.36;
+        addListeners();
+        setStarted(true);
+      },
     });
   }, []);
 
   useEffect(() => {
     let controls = controlsRef.current;
-    if (!focusedZone) {
-      previousZone.current = null;
-      if (savedPosition.current && savedTarget.current) {
-        animateCamera(savedPosition.current, savedTarget.current, {
-          onComplete: () => {
-            controls.enabled = true;
-            controls.target = savedTarget.current;
-          },
-        });
-      }
+
+    if (currentZone == null) {
       return;
     }
 
-    if (!previousZone.current) {
-      savedPosition.current = camera.position.clone();
-      savedTarget.current = controls.target.clone();
+    if (currentZone == -1) {
+      animateCamera(params.viewPosition, params.viewTarget, {
+        delay: 0.2,
+
+        onStart: () => {
+          animating.current = true;
+          controls.enabled = false;
+        },
+
+        onComplete: () => {
+          animating.current = false;
+          controls.enabled = true;
+        },
+      });
+
+      return;
     }
-    animateCamera(focusedZone.camera, focusedZone.target);
-    previousZone.current = focusedZone.name;
-  }, [focusedZone]);
+
+    let zone = zoneInfo.current[currentZone];
+
+    animateCamera(zone.camera, zone.target, {
+      delay: 0.2,
+
+      onStart: () => {
+        animating.current = true;
+        controls.enabled = false;
+      },
+
+      onComplete: () => {
+        animating.current = false;
+        controls.enabled = true;
+      },
+    });
+  }, [currentZone]);
+
+  // useEffect(() => {
+  //   let i = -1;
+  //   let countdown = 7000;
+  //   let timer;
+
+  //   function startCounter() {
+  //     clearInterval(timer);
+
+  //     timer = setInterval(() => {
+  //       if (i <= 7) {
+  //         i++;
+  //       } else {
+  //         i = -1;
+  //       }
+
+  //       setCurrentZone(i);
+  //       setShowPopup(false);
+  //     }, countdown);
+  //   }
+
+  //   document.addEventListener("click", () => {
+  //     startCounter();
+  //   });
+
+  //   setTimeout(() => {
+  //     startCounter();
+  //   }, 5000);
+  // }, []);
+
+  useEffect(() => {
+    let i = -1;
+    let countdown = 7000;
+    let timer;
+
+    function startCounter() {
+      clearInterval(timer);
+
+      timer = setInterval(() => {
+        if (!showPopup) {
+          if (i <= 7) {
+            i++;
+          } else {
+            i = -1;
+          }
+
+          setCurrentZone(i);
+          setShowPopup(false);
+        }
+      }, countdown);
+    }
+
+    const handleClick = () => {
+      if (!showPopup) {
+        startCounter();
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+
+    // Start the counter after 5 seconds
+    const initialTimeout = setTimeout(() => {
+      if (!showPopup) {
+        startCounter();
+      }
+    }, 7000);
+
+    // Cleanup on component unmount
+    return () => {
+      clearInterval(timer);
+      clearTimeout(initialTimeout);
+      document.removeEventListener("click", handleClick);
+    };
+  }, [showPopup]);
 
   return (
     <>
