@@ -1,3 +1,4 @@
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import gsap from "gsap/all";
 import * as THREE from "three";
@@ -5,11 +6,12 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
 import Zone from "./Zone";
 
-const Zones = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
+const Zones = () => {
+  const { zoneInfo } = useContext(GlobalContext);
   const { assets } = useContext(LoaderContext);
 
   // Setting zone list
-  const [zoneList, setZoneList] = useState({});
+
   useEffect(() => {
     let list = {};
 
@@ -30,7 +32,6 @@ const Zones = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
 
       if (node.name.slice(-4) == "Zone") {
         list[node.name] = {
-          name: node.name,
           geometry: node.geometry,
           material,
           hoverTl,
@@ -55,11 +56,17 @@ const Zones = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
       list[zoneName][type] = p;
     });
 
-    setZoneList(list);
+    let updated = [];
+
+    zoneInfo.current.forEach((zone) => {
+      updated.push({ ...zone, ...list[zone.meshName] });
+    });
+
+    zoneInfo.current = updated;
   }, []);
 
-  const { camera, controls, raycaster, pointer, scene } = useThree();
-  const groupRef = useRef();
+  // const { camera, controls, raycaster, pointer, scene } = useThree();
+  // const groupRef = useRef();
 
   // const zoomOut = useCallback(() => {
   //   if (focusedZone) {
@@ -83,7 +90,7 @@ const Zones = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
 
   return (
     <>
-      {initialAnimationCompleted && (
+      {/* {initialAnimationCompleted && (
         <group ref={groupRef}>
           {Object.entries(zoneList).map(([name, zone]) => {
             return (
@@ -97,7 +104,7 @@ const Zones = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
             );
           })}
         </group>
-      )}
+      )} */}
     </>
   );
 };

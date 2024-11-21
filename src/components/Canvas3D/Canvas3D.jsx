@@ -1,18 +1,16 @@
-import Settings from "./Settings.jsx";
-import Scene from "./Scene.jsx";
 import { ModeContext } from "src/contexts/ModeContext.jsx";
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
+import Scene from "./Scene.jsx";
+import Settings from "./Settings.jsx";
+import CameraControls from "./CameraControls.jsx";
 import { Leva, useControls } from "leva";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { useContext, useState } from "react";
-import CameraControls from "./CameraControls.jsx";
 
-const Canvas3D = ({ entered, focusedZone, setFocusedZone }) => {
+const Canvas3D = () => {
   const mode = useContext(ModeContext);
   const { completed } = useContext(LoaderContext);
-
-  const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(false);
 
   const rendererProps = useControls("Renderer", {
     outputColorSpace: {
@@ -48,28 +46,17 @@ const Canvas3D = ({ entered, focusedZone, setFocusedZone }) => {
         <Canvas
           gl={{
             ...rendererProps,
-            // antialias: false,
-            alpha: true,
           }}
           camera={{
-            position: [-300, 700, 200],
             far: 100000,
             near: 2,
           }}
         >
+          <Scene />
+
           <Settings />
 
-          <CameraControls
-            entered={entered}
-            focusedZone={focusedZone}
-            setInitialAnimationCompleted={setInitialAnimationCompleted}
-          />
-          <Scene
-            initialAnimationCompleted={initialAnimationCompleted}
-            focusedZone={focusedZone}
-            setFocusedZone={setFocusedZone}
-            entered={entered}
-          />
+          <CameraControls />
         </Canvas>
       )}
 

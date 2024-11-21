@@ -2,16 +2,16 @@ import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 import { useContext } from "react";
 
 const ZoneSlider = () => {
-  const { zoneInfo } = useContext(GlobalContext);
+  const { zoneInfo, setCurrentZone } = useContext(GlobalContext);
 
   const onButtonClick = (id) => {
-    console.log(zoneInfo[id]);
+    setCurrentZone(id);
   };
 
   return (
     <div className="absolute bottom-24 container left-1/2 -translate-x-1/2">
       <div className="w-full flex items-center justify-between">
-        {zoneInfo.map((zone) => {
+        {zoneInfo.current.map((zone) => {
           return (
             <button
               className="cursor-pointer text-white text-xl px-2 py-1 relative transition hover:scale-105"

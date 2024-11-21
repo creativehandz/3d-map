@@ -16,12 +16,7 @@ const Scene = ({ initialAnimationCompleted }) => {
 
         <Lights />
 
-        {/* 
-        <Zones
-          initialAnimationCompleted={initialAnimationCompleted}
-          focusedZone={focusedZone}
-          setFocusedZone={setFocusedZone}
-        /> */}
+        <Zones />
       </group>
     </>
   );
