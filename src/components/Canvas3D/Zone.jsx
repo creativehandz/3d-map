@@ -1,22 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 import gsap from "gsap/all";
 import { Html, Text } from "@react-three/drei";
-import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
-
-const zoneNames = {
-  _00Zone: "GrowTopia",
-  _01Zone: "Exponent",
-  _02Zone: "StepWest",
-  _03Zone: "StepEast",
-  _04Zone: "Exclaim",
-  _05Zone: "Ampersand",
-  _06Zone: "Tilde",
-  _07Zone: "Hash",
-  _08Zone: "Asterisk",
-};
+import * as THREE from "three";
+import { useCallback, useEffect, useContext, useRef, useState } from "react";
 
 const Zone = ({ name, geometry, target, info, focusedZone, setFocusedZone }) => {
+  const { zoneInfo } = useContext(GlobalContext);
+
   const meshRef = useRef();
   const indicatorRef = useRef();
   const textRef = useRef();
@@ -165,7 +156,8 @@ const Zone = ({ name, geometry, target, info, focusedZone, setFocusedZone }) => 
 
       <group ref={indicatorRef}>
         <Text ref={textRef} fontSize={30} textAlign="center" position-y={20} renderOrder={5}>
-          {zoneNames[name]}
+          {/* {zoneInfo[name]} */}
+          ZoneName
           <meshBasicMaterial
             depthWrite={false}
             depthTest={false}
