@@ -35,36 +35,45 @@ const Zone = ({ id, geometry, position }) => {
     marker.position.copy(p);
     marker.position.applyMatrix4(marker.parent.matrixWorld.clone().invert());
     marker.position.y = 32;
+
+    let markerPosition = position.clone();
+
+    let cameraPosition = new THREE.Vector3(-255, 348, 330);
+    cameraPosition.y = markerPosition.y;
+
+    markerRef.current.lookAt(cameraPosition);
   }, []);
 
-  // useEffect(() => {
-  //   let update = () => {
-  //     let markerPosition = position.clone();
-
-  //     let cameraPosition = controls.object.position.clone();
-  //     cameraPosition.y = markerPosition.y;
-
-  //     markerRef.current.lookAt(cameraPosition);
-  //   };
-
-  //   update();
-
-  //   controls.addEventListener("change", update);
-
-  //   return () => {
-  //     controls.removeEventListener("change", update);
-  //   };
-  // }, [controls]);
-
   useFrame(({ clock }) => {
+    markerRef.current.position.y = 32 + Math.sin(clock.getElapsedTime() * 1.8) * 4;
+  });
+
+  const updateRotation = useCallback(() => {
+    if (!controls) {
+      return;
+    }
+
     let markerPosition = position.clone();
 
     let cameraPosition = controls.object.position.clone();
     cameraPosition.y = markerPosition.y;
 
     markerRef.current.lookAt(cameraPosition);
-    markerRef.current.position.y = 32 + Math.sin(clock.getElapsedTime() * 1.8) * 4;
-  });
+  }, [controls]);
+
+  useEffect(() => {
+    // controls.addEventListener("change", updateRotation);
+
+    // () => {
+    //   return controls.removeEventListener("change", updateRotation);
+    // };
+
+    setTimeout(() => {
+      setInterval(() => {
+        updateRotation();
+      }, 1000 / 120);
+    }, 500);
+  }, [controls]);
 
   useEffect(() => {
     if (!tlRef.current) {

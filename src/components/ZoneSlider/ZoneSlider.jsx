@@ -3,7 +3,7 @@ import { useContext, useEffect, useCallback, useRef } from "react";
 import gsap from "gsap/all";
 
 const ZoneSlider = () => {
-  const { zoneInfo, currentZone, setCurrentZone, started, animating } =
+  const { zoneInfo, currentZone, setCurrentZone, started, animating, setShowPopup } =
     useContext(GlobalContext);
 
   const onButtonClick = useCallback(
@@ -70,6 +70,7 @@ const ZoneSlider = () => {
               key={zone.name}
               onClick={() => {
                 onButtonClick(zone.id);
+                setShowPopup(true);
               }}
             >
               <p className="drop-shadow-lg">{zone.name}</p>
