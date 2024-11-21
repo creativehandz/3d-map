@@ -8,18 +8,26 @@ import { useState } from "react";
 import Navbar from "./components/Navbar/Navbar.jsx";
 
 const App = () => {
-  const [zone, setZone] = useState();
+  const [focusedZone, setFocusedZone] = useState();
   const [entered, setEntered] = useState(false);
 
   return (
     <ModeProvider>
       <LoaderProvider sources={sources}>
         <div className="app">
-          <Canvas3D entered={entered} zone={zone} setZone={setZone} />
+          <Canvas3D
+            entered={entered}
+            focusedZone={focusedZone}
+            setFocusedZone={setFocusedZone}
+          />
           <LoadingScreen setEntered={setEntered} />
+
 
           {entered && <Navbar />}
           <Popup zone={zone} setZone={setZone} />
+
+          <Popup focusedZone={focusedZone} setFocusedZone={setFocusedZone} />
+
         </div>
       </LoaderProvider>
     </ModeProvider>

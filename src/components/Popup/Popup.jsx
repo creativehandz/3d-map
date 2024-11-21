@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap/all";
 
-const Popup = ({ zone, setZone }) => {
+const Popup = ({ focusedZone, setFocusedZone }) => {
   const popupRef = useRef();
   const toggleTl = useRef();
 
@@ -33,12 +33,12 @@ const Popup = ({ zone, setZone }) => {
   }, [active]);
 
   useEffect(() => {
-    if (zone) {
+    if (focusedZone) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [zone]);
+  }, [focusedZone]);
 
   return (
     <div
@@ -74,7 +74,7 @@ const Popup = ({ zone, setZone }) => {
           className="bg-red-200 px-4 py-1 rounded-full font-light text-gray-700 hover:scale-105 transition hover:bg-red-300 absolute bottom-4 right-4"
           onClick={() => {
             setActive(false);
-            setZone(false);
+            setFocusedZone(null);
           }}
         >
           Close
