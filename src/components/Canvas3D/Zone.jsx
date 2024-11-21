@@ -7,7 +7,8 @@ import * as THREE from "three";
 import { useCallback, useEffect, useContext, useRef, useState, useMemo } from "react";
 
 const Zone = ({ id, geometry, position }) => {
-  const { currentZone, setCurrentZone, started, animating } = useContext(GlobalContext);
+  const { currentZone, setCurrentZone, started, animating, setShowPopup } =
+    useContext(GlobalContext);
   const { getTexture } = useContext(LoaderContext);
 
   const { controls } = useThree();
@@ -161,6 +162,7 @@ const Zone = ({ id, geometry, position }) => {
     }
 
     setCurrentZone(id);
+    setShowPopup(true);
   }, [started]);
 
   // useEffect(() => {

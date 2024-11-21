@@ -20,7 +20,15 @@ const params = {
 };
 
 const CameraControls = () => {
-  const { zoneInfo, currentZone, setStarted, animating } = useContext(GlobalContext);
+  const {
+    zoneInfo,
+    currentZone,
+    setCurrentZone,
+    setStarted,
+    animating,
+    showPopup,
+    setShowPopup,
+  } = useContext(GlobalContext);
 
   const controlsRef = useRef();
   // const previousZone = useRef();
@@ -50,6 +58,9 @@ const CameraControls = () => {
     let animation = {
       progress: 0,
     };
+
+    options.delay == p1.distanceTo(p0) < 10 ? 0 : options.duration;
+    options.duration == p1.distanceTo(p0) < 10 ? 0.1 : options.duration;
 
     tl.to(animation, {
       progress: 1,
@@ -173,6 +184,80 @@ const CameraControls = () => {
       },
     });
   }, [currentZone]);
+
+  // useEffect(() => {
+  //   let i = -1;
+  //   let countdown = 7000;
+  //   let timer;
+
+  //   function startCounter() {
+  //     clearInterval(timer);
+
+  //     timer = setInterval(() => {
+  //       if (i <= 7) {
+  //         i++;
+  //       } else {
+  //         i = -1;
+  //       }
+
+  //       setCurrentZone(i);
+  //       setShowPopup(false);
+  //     }, countdown);
+  //   }
+
+  //   document.addEventListener("click", () => {
+  //     startCounter();
+  //   });
+
+  //   setTimeout(() => {
+  //     startCounter();
+  //   }, 5000);
+  // }, []);
+
+  useEffect(() => {
+    let i = -1;
+    let countdown = 7000;
+    let timer;
+
+    function startCounter() {
+      clearInterval(timer);
+
+      timer = setInterval(() => {
+        if (!showPopup) {
+          if (i <= 7) {
+            i++;
+          } else {
+            i = -1;
+          }
+
+          setCurrentZone(i);
+          setShowPopup(false);
+        }
+      }, countdown);
+    }
+
+    const handleClick = () => {
+      if (!showPopup) {
+        startCounter();
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+
+    // Start the counter after 5 seconds
+    const initialTimeout = setTimeout(() => {
+      if (!showPopup) {
+        startCounter();
+      }
+    }, 7000);
+
+    // Cleanup on component unmount
+    return () => {
+      clearInterval(timer);
+      clearTimeout(initialTimeout);
+      document.removeEventListener("click", handleClick);
+    };
+  }, [showPopup]);
 
   return (
     <>

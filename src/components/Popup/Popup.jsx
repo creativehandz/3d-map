@@ -3,13 +3,12 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap/all";
 
 const Popup = () => {
-  const { zoneInfo, currentZone, setCurrentZone } = useContext(GlobalContext);
+  const { zoneInfo, currentZone, setCurrentZone, showPopup, setShowPopup } =
+    useContext(GlobalContext);
 
   const popupRef = useRef();
   const toggleTl = useRef();
   const titleRef = useRef();
-
-  const [active, setActive] = useState(false);
 
   useEffect(() => {
     let tl = gsap.timeline().reverse().pause();
@@ -29,13 +28,13 @@ const Popup = () => {
   useEffect(() => {
     let tl = toggleTl.current;
 
-    if (currentZone != -1 && currentZone != null) {
+    if (currentZone != -1 && currentZone != null && showPopup) {
       tl.play();
       titleRef.current.innerText = zoneInfo.current[currentZone].name;
     } else {
       tl.reverse();
     }
-  }, [currentZone]);
+  }, [currentZone, showPopup]);
 
   return (
     <div
@@ -73,8 +72,8 @@ const Popup = () => {
         <button
           className="bg-red-200 px-4 py-1 rounded-full font-light text-gray-700 hover:scale-105 transition hover:bg-red-300 absolute bottom-4 right-4"
           onClick={() => {
-            setActive(false);
             setCurrentZone(-1);
+            setShowPopup(false);
           }}
         >
           Close

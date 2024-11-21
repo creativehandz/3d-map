@@ -2,7 +2,7 @@ import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 import { useCallback, useContext } from "react";
 
 const ResetButton = () => {
-  const { setCurrentZone, started, animating } = useContext(GlobalContext);
+  const { setCurrentZone, started, animating, setShowPopup } = useContext(GlobalContext);
 
   const onClick = useCallback(() => {
     if (!started || animating.current) {
@@ -10,6 +10,7 @@ const ResetButton = () => {
     }
 
     setCurrentZone(-1);
+    setShowPopup(false);
   }, [started, animating]);
 
   return (

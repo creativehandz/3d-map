@@ -19,6 +19,7 @@ const GlobalProvider = ({ children }) => {
   const [initialized, setInitialized] = useState(false);
   const [started, setStarted] = useState(false);
   const animating = useRef(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   return (
     <GlobalContext.Provider
@@ -31,6 +32,8 @@ const GlobalProvider = ({ children }) => {
         animating,
         initialized,
         setInitialized,
+        showPopup,
+        setShowPopup,
       }}
     >
       {children}
