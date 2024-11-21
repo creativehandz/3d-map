@@ -98,21 +98,25 @@ const LoadingScreen = ({ setEntered }) => {
           </div>
           <div
               id="loading"
-              className="fixed inset-0 z-[100] flex flex-col items-center justify-between"
+              className=" inset-0 z-[100] w-full"
               ref={container}
             >
+              <div className="grid grid-cols-1 gap-5 place-items-center w-full py-24 px-24">
               <img
-                src="./logo.jpeg"
+                src="./ibtec-logo-t.png"
                 alt="Logo"
-                className="w-24 h-auto mt-8"
+                className="w-52 h-auto mt-8"
               />
-
-              <div className="flex-1 flex items-center justify-center text-center">
-                <p className="text-white text-2xl font-light">
+              <p className="text-white text-6xl font-light text-center font">
                 Building Visions,
-                Shaping The Future
+                Shaping The Future<br></br>
                 Innovating Tomorrow, Sustainably Today
               </p>
+              </div>
+              
+
+              <div className="flex-1 flex items-center justify-center text-center">
+                
               </div>
               <div
             className="absolute inset-0 bg-repeat z-10 pointer-events-none"
