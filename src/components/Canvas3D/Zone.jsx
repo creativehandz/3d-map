@@ -57,12 +57,12 @@ const Zone = ({ id, geometry, position }) => {
 
   useFrame(({ clock }) => {
     let markerPosition = position.clone();
-    markerRef.current.position.y = 32 + Math.sin(clock.getElapsedTime() * 1.8) * 4;
 
     let cameraPosition = controls.object.position.clone();
     cameraPosition.y = markerPosition.y;
 
     markerRef.current.lookAt(cameraPosition);
+    markerRef.current.position.y = 32 + Math.sin(clock.getElapsedTime() * 1.8) * 4;
   });
 
   useEffect(() => {

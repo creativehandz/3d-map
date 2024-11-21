@@ -133,11 +133,30 @@ const CameraControls = () => {
   }, []);
 
   useEffect(() => {
+    let controls = controlsRef.current;
+
     if (currentZone == null) {
       return;
     }
 
-    let controls = controlsRef.current;
+    if (currentZone == -1) {
+      animateCamera(params.viewPosition, params.viewTarget, {
+        delay: 0.2,
+
+        onStart: () => {
+          animating.current = true;
+          controls.enabled = false;
+        },
+
+        onComplete: () => {
+          animating.current = false;
+          controls.enabled = true;
+        },
+      });
+
+      return;
+    }
+
     let zone = zoneInfo.current[currentZone];
 
     animateCamera(zone.camera, zone.target, {

@@ -12,6 +12,7 @@ const Zones = () => {
 
   // Setting zone list
   const [list, setList] = useState([]);
+
   useEffect(() => {
     let list = {};
 
@@ -52,47 +53,8 @@ const Zones = () => {
     setList(updated);
   }, []);
 
-  // const { camera, controls, raycaster, pointer, scene } = useThree();
-  // const groupRef = useRef();
-
-  // const zoomOut = useCallback(() => {
-  //   if (focusedZone) {
-  //     return;
-  //   }
-  //   raycaster.setFromCamera(pointer, camera);
-  //   let intersects = raycaster.intersectObjects(groupRef.current.children);
-  //   if (intersects.length == 0) {
-  //     setFocusedZone(null);
-  //     return;
-  //   }
-  // }, [focusedZone]);
-
-  // useEffect(() => {
-  //   window.addEventListener("click", zoomOut);
-
-  //   return () => {
-  //     window.removeEventListener("click", zoomOut);
-  //   };
-  // }, [zoomOut]);
-
   return (
     <>
-      {/* {initialAnimationCompleted && (
-        <group ref={groupRef}>
-          {Object.entries(zoneList).map(([name, zone]) => {
-            return (
-              <Zone
-                key={name}
-                info={zone}
-                {...zone}
-                focusedZone={focusedZone}
-                setFocusedZone={setFocusedZone}
-              />
-            );
-          })}
-        </group>
-      )} */}
-
       <group>
         {list.map((zone) => {
           return (

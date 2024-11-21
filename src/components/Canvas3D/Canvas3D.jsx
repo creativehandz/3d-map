@@ -7,6 +7,7 @@ import { Leva, useControls } from "leva";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { useContext, useState } from "react";
+import ResetButton from "./ResetButton.jsx";
 
 const Canvas3D = () => {
   const mode = useContext(ModeContext);
@@ -61,6 +62,8 @@ const Canvas3D = () => {
       )}
 
       <Leva hidden={mode != "DEV"} />
+
+      <ResetButton />
     </div>
   );
 };
