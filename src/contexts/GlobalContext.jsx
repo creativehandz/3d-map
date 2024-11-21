@@ -16,6 +16,7 @@ const GlobalProvider = ({ children }) => {
   ]);
 
   const [currentZone, setCurrentZone] = useState(null);
+  const [initialized, setInitialized] = useState(false);
   const [started, setStarted] = useState(false);
   const animating = useRef(false);
 
@@ -28,6 +29,8 @@ const GlobalProvider = ({ children }) => {
         started,
         setStarted,
         animating,
+        initialized,
+        setInitialized,
       }}
     >
       {children}

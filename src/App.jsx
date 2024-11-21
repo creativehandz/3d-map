@@ -16,7 +16,7 @@ const App = () => {
           <div className="app">
             <Canvas3D />
 
-            {/* <LoadingScreen /> */}
+            <LoadingScreen />
 
             <Popup />
 

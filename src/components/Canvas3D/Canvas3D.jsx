@@ -8,8 +8,10 @@ import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { useContext, useState } from "react";
 import ResetButton from "./ResetButton.jsx";
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 
 const Canvas3D = () => {
+  const { initialized } = useContext(GlobalContext);
   const mode = useContext(ModeContext);
   const { completed } = useContext(LoaderContext);
 
@@ -43,7 +45,7 @@ const Canvas3D = () => {
 
   return (
     <div className="fixed inset-0">
-      {completed && (
+      {initialized && (
         <Canvas
           gl={{
             ...rendererProps,

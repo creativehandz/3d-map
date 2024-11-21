@@ -1,9 +1,11 @@
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
 import { LoaderContext } from "src/contexts/LoaderContext.jsx";
 import { ModeContext } from "src/contexts/ModeContext.jsx";
 import { useContext, useEffect, useRef, useState, useMemo } from "react";
 import gsap from "gsap/all";
 
 const LoadingScreen = () => {
+  const { setInitialized } = useContext(GlobalContext);
   const mode = useContext(ModeContext);
   const { progress, completed } = useContext(LoaderContext);
   const [animationCompleted, setAnimationCompleted] = useState(false);
@@ -19,7 +21,7 @@ const LoadingScreen = () => {
   useEffect(() => {
     if (mode == "DEV") {
       hideTl.current.play();
-      setEntered(true);
+      setInitialized(true);
       return;
     }
 
@@ -77,7 +79,7 @@ const LoadingScreen = () => {
 
   const onEnter = () => {
     hideTl.current.play();
-    setEntered(true);
+    setInitialized(true);
   };
 
   return (
