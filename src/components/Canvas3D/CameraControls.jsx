@@ -83,7 +83,7 @@ const CameraControls = ({ entered, focusedZone, setInitialAnimationCompleted }) 
   useEffect(() => {
     if (entered) {
       animateCamera(params.viewPosition, params.viewTarget, {
-        duration: 2,
+        duration: 5,
         delay: 0.4,
         onComplete: () => {
           controlsRef.current.target = new THREE.Vector3(-32, -154, -55);
