@@ -5,6 +5,11 @@ import LoadingScreen from "./components/LoadingScreen/LoadingScreen.jsx";
 import sources from "./assets/sources.js";
 import Popup from "./components/Popup/Popup.jsx";
 import { useState } from "react";
+import Header from "./common/Header/Header.jsx";
+import Footer from "./common/Footer/Footer.jsx";
+import { Routes, Route } from "react-router-dom";
+import PageOne from "./routes/PageOne/PageOne.jsx";
+import PageTwo from "./routes/PageTwo/PageTwo.jsx";
 
 const App = () => {
   const [focusedZone, setFocusedZone] = useState();
@@ -14,14 +19,30 @@ const App = () => {
     <ModeProvider>
       <LoaderProvider sources={sources}>
         <div className="app">
-          <Canvas3D
-            entered={entered}
-            focusedZone={focusedZone}
-            setFocusedZone={setFocusedZone}
-          />
-          <LoadingScreen setEntered={setEntered} />
+          <Header />
 
-          <Popup focusedZone={focusedZone} setFocusedZone={setFocusedZone} />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <Canvas3D
+                    entered={entered}
+                    focusedZone={focusedZone}
+                    setFocusedZone={setFocusedZone}
+                  />
+                  <LoadingScreen setEntered={setEntered} />
+
+                  <Popup focusedZone={focusedZone} setFocusedZone={setFocusedZone} />
+                </>
+              }
+            />
+
+            <Route path="/page-one" element={<PageOne />} />
+
+            <Route path="/page-two" element={<PageTwo />} />
+          </Routes>
+          <Footer />
         </div>
       </LoaderProvider>
     </ModeProvider>
