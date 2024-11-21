@@ -17,10 +17,18 @@ const GlobalProvider = ({ children }) => {
 
   const [currentZone, setCurrentZone] = useState(null);
   const [started, setStarted] = useState(false);
+  const animating = useRef(false);
 
   return (
     <GlobalContext.Provider
-      value={{ zoneInfo, currentZone, setCurrentZone, started, setStarted }}
+      value={{
+        zoneInfo,
+        currentZone,
+        setCurrentZone,
+        started,
+        setStarted,
+        animating,
+      }}
     >
       {children}
     </GlobalContext.Provider>

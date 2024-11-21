@@ -20,7 +20,7 @@ const params = {
 };
 
 const CameraControls = () => {
-  const { zoneInfo, currentZone, setStarted } = useContext(GlobalContext);
+  const { zoneInfo, currentZone, setStarted, animating } = useContext(GlobalContext);
 
   const controlsRef = useRef();
   // const previousZone = useRef();
@@ -74,6 +74,7 @@ const CameraControls = () => {
       },
 
       onComplete: () => {
+        controls.target = view;
         options.onComplete();
       },
     });
@@ -143,10 +144,12 @@ const CameraControls = () => {
       delay: 0.2,
 
       onStart: () => {
+        animating.current = true;
         controls.enabled = false;
       },
 
       onComplete: () => {
+        animating.current = false;
         controls.enabled = true;
       },
     });

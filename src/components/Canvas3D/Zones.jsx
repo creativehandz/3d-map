@@ -11,30 +11,16 @@ const Zones = () => {
   const { assets } = useContext(LoaderContext);
 
   // Setting zone list
-
+  const [list, setList] = useState([]);
   useEffect(() => {
     let list = {};
 
     let zoneMeshes = assets.gltf.zones.scene;
 
     zoneMeshes.traverse((node) => {
-      let material = new THREE.MeshBasicMaterial({
-        color: 0x54c786,
-        transparent: true,
-        opacity: 0,
-        depthTest: false,
-      });
-
-      let hoverTl = gsap.timeline().reverse().pause();
-      hoverTl.to(material, {
-        opacity: 0.6,
-      });
-
       if (node.name.slice(-4) == "Zone") {
         list[node.name] = {
           geometry: node.geometry,
-          material,
-          hoverTl,
           camera: 0,
           target: 0,
         };
@@ -63,6 +49,7 @@ const Zones = () => {
     });
 
     zoneInfo.current = updated;
+    setList(updated);
   }, []);
 
   // const { camera, controls, raycaster, pointer, scene } = useThree();
@@ -105,6 +92,12 @@ const Zones = () => {
           })}
         </group>
       )} */}
+
+      <group>
+        {list.map((zone) => {
+          return <Zone key={zone.id} id={zone.id} geometry={zone.geometry} />;
+        })}
+      </group>
     </>
   );
 };

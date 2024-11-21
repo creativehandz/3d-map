@@ -1,15 +1,22 @@
 import { GlobalContext } from "src/contexts/GlobalContext.jsx";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useCallback } from "react";
 
 const ZoneSlider = () => {
-  const { zoneInfo, setCurrentZone, started } = useContext(GlobalContext);
+  const { zoneInfo, setCurrentZone, started, animating } = useContext(GlobalContext);
 
-  const onButtonClick = (id) => {
-    setCurrentZone(id);
-  };
+  const onButtonClick = useCallback(
+    (id) => {
+      if (!started || animating.current) {
+        return;
+      }
+
+      setCurrentZone(id);
+    },
+    [started]
+  );
 
   useEffect(() => {
-    console.log(started);
+    // console.log(started);
   }, [started]);
 
   return (
