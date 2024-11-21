@@ -3,14 +3,13 @@ import gsap from "gsap/all";
 import * as THREE from "three";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
+import Zone from "./Zone";
 
-const Zones = ({ initialAnimationCompleted, zone, setZone }) => {
-  const { getNode, assets } = useContext(LoaderContext);
+const Zones = ({ initialAnimationCompleted, focusedZone, setFocusedZone }) => {
+  const { assets } = useContext(LoaderContext);
 
-  const groupRef = useRef();
+  // Setting zone list
   const [zoneList, setZoneList] = useState({});
-  const { camera, controls, raycaster, pointer, scene } = useThree();
-
   useEffect(() => {
     let list = {};
 
@@ -59,60 +58,47 @@ const Zones = ({ initialAnimationCompleted, zone, setZone }) => {
     setZoneList(list);
   }, []);
 
-  const zoomOut = useCallback(() => {
-    if (zone) {
-      return;
-    }
-    raycaster.setFromCamera(pointer, camera);
-    let intersects = raycaster.intersectObjects(groupRef.current.children);
-    if (intersects.length == 0) {
-      setZone(false);
-      return;
-    }
-  }, [zone]);
+  const { camera, controls, raycaster, pointer, scene } = useThree();
+  const groupRef = useRef();
 
-  useEffect(() => {
-    window.addEventListener("click", zoomOut);
+  // const zoomOut = useCallback(() => {
+  //   if (focusedZone) {
+  //     return;
+  //   }
+  //   raycaster.setFromCamera(pointer, camera);
+  //   let intersects = raycaster.intersectObjects(groupRef.current.children);
+  //   if (intersects.length == 0) {
+  //     setFocusedZone(null);
+  //     return;
+  //   }
+  // }, [focusedZone]);
 
-    return () => {
-      window.removeEventListener("click", zoomOut);
-    };
-  }, [zoomOut]);
+  // useEffect(() => {
+  //   window.addEventListener("click", zoomOut);
 
-  const onZoneClick = useCallback(
-    (zone) => {
-      if (!initialAnimationCompleted) {
-        return;
-      }
-      setZone(zone);
-    },
-    [initialAnimationCompleted]
-  );
+  //   return () => {
+  //     window.removeEventListener("click", zoomOut);
+  //   };
+  // }, [zoomOut]);
 
   return (
-    <group ref={groupRef}>
-      {Object.entries(zoneList).map(([name, zone]) => {
-        return (
-          <mesh
-            key={name}
-            userData={{ name }}
-            geometry={zone.geometry}
-            material={zone.material}
-            onPointerEnter={() => {
-              document.body.style.cursor = "pointer";
-              zone.hoverTl.play();
-            }}
-            onPointerLeave={() => {
-              document.body.style.cursor = "auto";
-              zone.hoverTl.reverse();
-            }}
-            onClick={() => {
-              onZoneClick(zone);
-            }}
-          ></mesh>
-        );
-      })}
-    </group>
+    <>
+      {initialAnimationCompleted && (
+        <group ref={groupRef}>
+          {Object.entries(zoneList).map(([name, zone]) => {
+            return (
+              <Zone
+                key={name}
+                info={zone}
+                {...zone}
+                focusedZone={focusedZone}
+                setFocusedZone={setFocusedZone}
+              />
+            );
+          })}
+        </group>
+      )}
+    </>
   );
 };
 export default Zones;

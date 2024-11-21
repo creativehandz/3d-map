@@ -7,17 +7,21 @@ import Popup from "./components/Popup/Popup.jsx";
 import { useState } from "react";
 
 const App = () => {
-  const [zone, setZone] = useState();
+  const [focusedZone, setFocusedZone] = useState();
   const [entered, setEntered] = useState(false);
 
   return (
     <ModeProvider>
       <LoaderProvider sources={sources}>
         <div className="app">
-          <Canvas3D entered={entered} zone={zone} setZone={setZone} />
+          <Canvas3D
+            entered={entered}
+            focusedZone={focusedZone}
+            setFocusedZone={setFocusedZone}
+          />
           <LoadingScreen setEntered={setEntered} />
 
-          <Popup zone={zone} setZone={setZone} />
+          <Popup focusedZone={focusedZone} setFocusedZone={setFocusedZone} />
         </div>
       </LoaderProvider>
     </ModeProvider>
