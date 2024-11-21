@@ -20,7 +20,7 @@ const params = {
 };
 
 const CameraControls = () => {
-  const { zoneInfo, currentZone } = useContext(GlobalContext);
+  const { zoneInfo, currentZone, setStarted } = useContext(GlobalContext);
 
   const controlsRef = useRef();
   // const previousZone = useRef();
@@ -80,15 +80,53 @@ const CameraControls = () => {
   };
 
   useEffect(() => {
+    let controls = controlsRef.current;
+
     camera.position.copy(params.initialPosition);
     camera.lookAt(params.initialTarget);
-    controlsRef.current.target = params.initialTarget;
+    controls.target = params.initialTarget;
+
+    let addListeners = () => {
+      controls.addEventListener("change", () => {
+        if (!controls.enabled) {
+          return;
+        }
+
+        camera.position.x = Math.min(
+          params.limitPX,
+          Math.max(params.limitNX, camera.position.x)
+        );
+        camera.position.y = Math.max(params.limitNY, camera.position.y);
+        camera.position.z = Math.min(
+          params.limitPZ,
+          Math.max(params.limitNZ, camera.position.z)
+        );
+
+        controls.target.x = Math.min(
+          params.limitPX,
+          Math.max(params.limitNX, controls.target.x)
+        );
+        controls.target.z = Math.min(
+          params.limitPZ,
+          Math.max(params.limitNZ, controls.target.z)
+        );
+      });
+    };
 
     animateCamera(params.viewPosition, params.viewTarget, {
       delay: 0.4,
       duration: 5,
+
+      onStart: () => {
+        controls.enabled = false;
+      },
+
       onComplete: () => {
-        controlsRef.current.target = params.viewTarget;
+        controls.enabled = true;
+        controls.target = params.viewTarget;
+        controls.maxPolarAngle = Math.PI * 0.36;
+        addListeners();
+        setStarted(true);
       },
     });
   }, []);
@@ -113,62 +151,6 @@ const CameraControls = () => {
       },
     });
   }, [currentZone]);
-
-  // useEffect(() => {
-  //   if (entered) {
-  //     animateCamera(params.viewPosition, params.viewTarget, {
-  //       duration: 5,
-  //       delay: 0.4,
-  //       onComplete: () => {
-  //         controlsRef.current.target = new THREE.Vector3(-32, -154, -55);
-  //         controlsRef.current.maxDistance = 1000;
-  //         controlsRef.current.maxPolarAngle = Math.PI * 0.4;
-  //         setTimeout(() => {
-  //           setInitialAnimationCompleted(true);
-  //         }, 200);
-  //       },
-  //     });
-  //   }
-  // }, [entered]);
-
-  // useEffect(() => {
-  //   let controls = controlsRef.current;
-
-  //   controls.addEventListener("change", () => {
-  //     if (!controls.enabled) {
-  //       return;
-  //     }
-  //     camera.position.x = Math.min(params.limitPX, Math.max(params.limitNX, camera.position.x));
-  //     camera.position.y = Math.max(params.limitNY, camera.position.y);
-  //     camera.position.z = Math.min(params.limitPZ, Math.max(params.limitNZ, camera.position.z));
-
-  //     controls.target.x = Math.min(params.limitPX, Math.max(params.limitNX, controls.target.x));
-  //     controls.target.z = Math.min(params.limitPZ, Math.max(params.limitNZ, controls.target.z));
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   let controls = controlsRef.current;
-  //   if (!focusedZone) {
-  //     previousZone.current = null;
-  //     if (savedPosition.current && savedTarget.current) {
-  //       animateCamera(savedPosition.current, savedTarget.current, {
-  //         onComplete: () => {
-  //           controls.enabled = true;
-  //           controls.target = savedTarget.current;
-  //         },
-  //       });
-  //     }
-  //     return;
-  //   }
-
-  //   if (!previousZone.current) {
-  //     savedPosition.current = camera.position.clone();
-  //     savedTarget.current = controls.target.clone();
-  //   }
-  //   animateCamera(focusedZone.camera, focusedZone.target);
-  //   previousZone.current = focusedZone.name;
-  // }, [focusedZone]);
 
   return (
     <>

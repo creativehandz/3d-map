@@ -1,12 +1,16 @@
 import { GlobalContext } from "src/contexts/GlobalContext.jsx";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 const ZoneSlider = () => {
-  const { zoneInfo, setCurrentZone } = useContext(GlobalContext);
+  const { zoneInfo, setCurrentZone, started } = useContext(GlobalContext);
 
   const onButtonClick = (id) => {
     setCurrentZone(id);
   };
+
+  useEffect(() => {
+    console.log(started);
+  }, [started]);
 
   return (
     <div className="absolute bottom-24 container left-1/2 -translate-x-1/2">
