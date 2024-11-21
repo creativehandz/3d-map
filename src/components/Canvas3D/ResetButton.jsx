@@ -14,7 +14,7 @@ const ResetButton = () => {
   }, [started, animating]);
 
   return (
-    <div className="container absolute bottom-4 left-1/2 -translate-x-1/2 h-16 pointer-events-none">
+    <div className="container absolute bottom-16 left-1/2 -translate-x-1/2 h-16 pointer-events-none">
       <button
         className="absolute right-0 bottom-0 text-xl text-white cursor-pointer pointer-events-auto border drop-shadow-md px-4 py-2 h-fit transition hover:scale-105 hover:bg-white hover:bg-opacity-10"
         onClick={onClick}

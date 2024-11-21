@@ -16,41 +16,41 @@ import PageThree from "./routes/PageThree/PageThree.jsx";
 
 const App = () => {
   return (
-        <div className="app">
-          <Header />
+    <div className="app min-h-screen relative">
+      <Header />
 
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <GlobalProvider>
-                    <ModeProvider>
-                      <LoaderProvider sources={sources}>
-                        <div className="app">
-                          <Canvas3D />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <GlobalProvider>
+                <ModeProvider>
+                  <LoaderProvider sources={sources}>
+                    <div className="app">
+                      <Canvas3D />
 
-                          <LoadingScreen />
+                      <LoadingScreen />
 
-                          <Popup />
+                      <Popup />
 
-                          <ZoneSlider />
-                        </div>
-                      </LoaderProvider>
-                    </ModeProvider>
-                  </GlobalProvider>
-                </>
-              }
-            />
+                      <ZoneSlider />
+                    </div>
+                  </LoaderProvider>
+                </ModeProvider>
+              </GlobalProvider>
+            </>
+          }
+        />
 
-            <Route path="/page-one" element={<PageOne />} />
+        <Route path="/page-one" element={<PageOne />} />
 
-            <Route path="/page-two" element={<PageTwo />} />
+        <Route path="/page-two" element={<PageTwo />} />
 
-            <Route path="/page-three" element={<PageThree />} />
-          </Routes>
-          <Footer />
-        </div>
+        <Route path="/page-three" element={<PageThree />} />
+      </Routes>
+      <Footer />
+    </div>
   );
 };
 

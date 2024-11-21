@@ -61,7 +61,7 @@ const ZoneSlider = () => {
   }, [started]);
 
   return (
-    <div className="absolute bottom-24 container left-1/2 -translate-x-1/2" ref={sliderRef}>
+    <div className="absolute bottom-32 container left-1/2 -translate-x-1/2" ref={sliderRef}>
       <div className="w-full flex items-center justify-between">
         {zoneInfo.current.map((zone) => {
           return (
