@@ -23,6 +23,14 @@ const Zone = ({ id, geometry, position }) => {
       opacity: 0.4,
     });
 
+    tl.to(
+      markerRef.current.material,
+      {
+        opacity: 1,
+      },
+      "<"
+    );
+
     tlRef.current = tl;
   }, []);
 
@@ -62,12 +70,6 @@ const Zone = ({ id, geometry, position }) => {
   }, [controls]);
 
   useEffect(() => {
-    // controls.addEventListener("change", updateRotation);
-
-    // () => {
-    //   return controls.removeEventListener("change", updateRotation);
-    // };
-
     setTimeout(() => {
       setInterval(() => {
         updateRotation();
@@ -146,6 +148,7 @@ const Zone = ({ id, geometry, position }) => {
           depthTest={false}
           depthWrite={false}
           side={THREE.DoubleSide}
+          opacity={0}
         />
       </mesh>
     </group>

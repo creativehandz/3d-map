@@ -12,6 +12,9 @@ const params = {
   viewPosition: new THREE.Vector3(-255, 348, 330),
   viewTarget: new THREE.Vector3(-32, -154, -55),
 
+  // viewPosition: new THREE.Vector3(0, 1800, 0),
+  // viewTarget: new THREE.Vector3(-32, -154, -55),
+
   limitNX: -960,
   limitPX: 960,
   limitNZ: -640,
@@ -137,6 +140,7 @@ const CameraControls = () => {
         controls.enabled = true;
         controls.target = params.viewTarget;
         controls.maxPolarAngle = Math.PI * 0.36;
+        controls.maxDistance = 1200;
         addListeners();
         setStarted(true);
       },
@@ -184,35 +188,6 @@ const CameraControls = () => {
       },
     });
   }, [currentZone]);
-
-  // useEffect(() => {
-  //   let i = -1;
-  //   let countdown = 7000;
-  //   let timer;
-
-  //   function startCounter() {
-  //     clearInterval(timer);
-
-  //     timer = setInterval(() => {
-  //       if (i <= 7) {
-  //         i++;
-  //       } else {
-  //         i = -1;
-  //       }
-
-  //       setCurrentZone(i);
-  //       setShowPopup(false);
-  //     }, countdown);
-  //   }
-
-  //   document.addEventListener("click", () => {
-  //     startCounter();
-  //   });
-
-  //   setTimeout(() => {
-  //     startCounter();
-  //   }, 5000);
-  // }, []);
 
   useEffect(() => {
     let i = -1;
@@ -265,7 +240,6 @@ const CameraControls = () => {
         ref={controlsRef}
         makeDefault
         dampingFactor={0.1}
-        // maxPolarAngle={Math.PI * 0.26}
         panSpeed={0.4}
         rotateSpeed={0.4}
         zoomSpeed={0.3}

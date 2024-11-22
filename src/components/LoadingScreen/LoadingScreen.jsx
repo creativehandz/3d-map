@@ -29,7 +29,6 @@ const LoadingScreen = () => {
 
     tl.to(container.current, {
       delay: 0.2,
-      opacity: 0,
       duration: 0.8,
       onComplete: () => {
         container.current.style.display = "none";
@@ -49,8 +48,8 @@ const LoadingScreen = () => {
     tl.to(line.current, {
       scaleX: progress,
       ease: "linear",
-      delay: progress < 0.3 ? 0.4 : 0.0,
-      duration: 0.8,
+      // delay: progress < 0.3 ? 0.4 : 0.0,
+      duration: 0.1,
       onComplete: () => {
         if (progress == 1) {
           setAnimationCompleted(true);
@@ -108,9 +107,7 @@ const LoadingScreen = () => {
             </div>
 
             <div className="flex-1 flex items-center justify-center text-center"></div>
-            <div
-              className="absolute inset-0 bg-repeat z-10 pointer-events-none moving-cloud "
-            ></div>
+            <div className="absolute inset-0 bg-repeat z-10 pointer-events-none moving-cloud "></div>
             <div
               className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
               ref={indicator}
