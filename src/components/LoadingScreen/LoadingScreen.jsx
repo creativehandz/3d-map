@@ -109,13 +109,7 @@ const LoadingScreen = () => {
 
             <div className="flex-1 flex items-center justify-center text-center"></div>
             <div
-              className="absolute inset-0 bg-repeat z-10 pointer-events-none"
-              style={{
-                backgroundImage: "url('/cloud-overlay.png')",
-                animation: "cloudLoop 80s linear infinite",
-                backgroundSize: "cover",
-                backgroundPosition: "center bottom",
-              }}
+              className="absolute inset-0 bg-repeat z-10 pointer-events-none moving-cloud "
             ></div>
             <div
               className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
