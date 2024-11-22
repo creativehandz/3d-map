@@ -1,16 +1,43 @@
-const Footer = () => {
-  return (
-    <footer className="absolute bottom-0 left-0 w-full z-50">
-      <div className="container mx-auto flex items-center justify-between py-4">
-        {/* Logo */}
-        <div>
-          <a href="/" className="text-2xl text-white opacity-70">
-            <img src="./ibtec-logo-t.png" className="w-24" />
-          </a>
-        </div>
+import { GlobalContext } from "src/contexts/GlobalContext.jsx";
+import { useContext, useRef, useEffect } from "react";
+import gsap from "gsap/all";
 
+const Footer = () => {
+  const { started } = useContext(GlobalContext);
+
+  const showTl = useRef();
+
+  useEffect(() => {
+    let tl = gsap.timeline().pause();
+
+    tl.fromTo(
+      ".footer-item",
+      {
+        opacity: 0,
+        y: 16,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "linear",
+      }
+    );
+
+    showTl.current = tl;
+  }, []);
+
+  useEffect(() => {
+    if (started) {
+      showTl.current.play();
+    }
+  }, [started]);
+
+  return (
+    <footer className="absolute bottom-0 left-0 w-full z-50 pointer-events-none">
+      <div className="container mx-auto flex items-center justify-between py-4">
         {/* Copyright */}
-        <div className="text-white opacity-80 text-xl">
+        <div className="footer-item text-white opacity-80 text-xl">
           <p>Copyright 2024</p>
         </div>
       </div>
