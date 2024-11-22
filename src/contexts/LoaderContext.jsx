@@ -1,6 +1,6 @@
 import sources from "src/assets/sources.js";
 import { createContext, useState, useEffect, useCallback } from "react";
-import { LoadingManager } from "three";
+import { LoadingManager, RepeatWrapping } from "three";
 import { flushSync } from "react-dom";
 
 const getFileName = (path) => {
@@ -55,6 +55,8 @@ const LoaderProvider = ({ children }) => {
         loader.load(path, (loaded) => {
           if (item.type == "texture") {
             loaded.flipY = false;
+            loaded.wrapS = RepeatWrapping;
+            loaded.wrapT = RepeatWrapping;
           }
 
           if (item.type == "gltf") {
@@ -112,4 +114,3 @@ const LoaderProvider = ({ children }) => {
 };
 
 export { LoaderContext, LoaderProvider };
-
