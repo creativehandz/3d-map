@@ -66,14 +66,14 @@ const ZoneSlider = () => {
         {zoneInfo.current.map((zone) => {
           return (
             <button
-              className={`slider-button cursor-pointer text-xl px-2 py-1 relative transition duration-500 hover:scale-105 ${zone.id == currentZone ? "text-green-500 font-bold scale-105" : "text-white"}`}
+              className={`slider-button cursor-pointer text-xl px-2 py-1 relative group ${zone.id == currentZone ? "text-green-500 font-bold scale-105" : "text-white"}`}
               key={zone.name}
               onClick={() => {
                 onButtonClick(zone.id);
                 setShowPopup(true);
               }}
             >
-              <p className="drop-shadow-lg">{zone.name}</p>
+              <p className="group-hover:scale-105 transition drop-shadow-lg">{zone.name}</p>
 
               <div className="absolute top-full left-1/2 -translate-x-1/2 w-px h-2 bg-white"></div>
             </button>
