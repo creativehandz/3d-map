@@ -28,8 +28,6 @@ const Zones = () => {
       }
     });
 
-    let q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.27);
-
     zoneMeshes.traverse((node) => {
       let type = node.name.substring(3, node.name.length).toLowerCase();
       if (!(type == "target" || type == "camera")) {
@@ -37,10 +35,7 @@ const Zones = () => {
       }
 
       let zoneName = node.name.slice(0, 3) + "Zone";
-      let p = node.position.clone().applyQuaternion(q);
-      p.x += 100;
-
-      list[zoneName][type] = p;
+      list[zoneName][type] = node.position.clone();
     });
 
     let updated = [];

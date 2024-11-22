@@ -33,7 +33,7 @@ const Zone = ({ id, geometry, position }) => {
     let p = position.clone();
 
     marker.position.copy(p);
-    marker.position.applyMatrix4(marker.parent.matrixWorld.clone().invert());
+    // marker.position.applyMatrix4(marker.parent.matrixWorld.clone().invert());
     marker.position.y = 32;
 
     let markerPosition = position.clone();
@@ -87,62 +87,6 @@ const Zone = ({ id, geometry, position }) => {
     }
   }, [currentZone]);
 
-  // const indicatorRef = useRef();
-  // const textRef = useRef();
-  // const lineRef = useRef();
-
-  // // Setting indicator's world coordinates
-
-  // // Timelines
-  // const hoverTl = useRef();
-
-  // useEffect(() => {
-  //   let material = meshRef.current.material;
-
-  //   let hTl = gsap.timeline().pause().reverse();
-  //   hoverTl.current = hTl;
-  //   let duration = 0.6;
-
-  //   hTl.fromTo(
-  //     material,
-  //     { opacity: 0 },
-  //     {
-  //       opacity: 0.4,
-  //       duration,
-  //     }
-  //   );
-
-  //   hTl.to(
-  //     textRef.current.material,
-  //     {
-  //       opacity: 1,
-  //       duration,
-  //     },
-  //     "<"
-  //   );
-
-  //   hTl.from(
-  //     textRef.current.position,
-  //     {
-  //       y: 40,
-  //       duration,
-  //     },
-  //     "<"
-  //   );
-
-  //   hTl.to(
-  //     lineRef.current.scale,
-  //     {
-  //       y: 1,
-  //       duration,
-  //     },
-  //     "<"
-  //   );
-  // }, []);
-
-  // // Event handlers
-  // const [status, setStatus] = useState("default");
-
   const onPointerEnter = useCallback(() => {
     if (!started) {
       return;
@@ -173,21 +117,6 @@ const Zone = ({ id, geometry, position }) => {
     setCurrentZone(id);
     setShowPopup(true);
   }, [started]);
-
-  // useEffect(() => {
-  //   switch (status) {
-  //     case "default":
-  //       hoverTl.current.reverse();
-  //       break;
-
-  //     case "hovered":
-  //       hoverTl.current.play();
-  //       break;
-  //   }
-  // }, [status]);
-
-  // // Updating rotation
-  // const { controls } = useThree();
 
   return (
     <group>

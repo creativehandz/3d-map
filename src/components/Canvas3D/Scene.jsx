@@ -6,10 +6,10 @@ import Model from "./Model.jsx";
 import CloudGroup from "./CloudGroup.jsx";
 import Lights from "./Lights.jsx";
 
-const Scene = ({ initialAnimationCompleted }) => {
+const Scene = () => {
   return (
     <>
-      <group rotation-y={Math.PI * 0.27} position-x={100}>
+      <group>
         <Model />
 
         <CloudGroup />
