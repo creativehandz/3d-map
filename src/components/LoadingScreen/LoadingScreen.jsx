@@ -99,7 +99,7 @@ const LoadingScreen = () => {
           </div>
           <div id="loading" className="inset-0 z-[100] w-full" ref={container}>
             <div className="w-full py-0 px-0">
-              <div className="absolute left-[43%]"><img src="./ibtec-logo-t.png" alt="Logo" className=" w-52 h-auto mt-[-100px]  right mx-auto mb-36" /></div>
+              <div className="absolute left-[44%]"><img src="./ibtec-logo-t.png" alt="Logo" className=" w-52 h-auto mt-[-100px]  right mx-auto mb-36" /></div>
               
               <p className="text-white text-6xl font-light text-center leading-[78px]">
                 Building Visions, Shaping The Future<br></br>
