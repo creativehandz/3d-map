@@ -28,7 +28,7 @@ const Footer = () => {
   }, []);
 
   useEffect(() => {
-    if (started) {
+    if (started || window.location.pathname != "/") {
       showTl.current.play();
     }
   }, [started]);
