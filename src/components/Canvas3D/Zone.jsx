@@ -131,7 +131,7 @@ const Zone = ({ id, geometry, position }) => {
         renderOrder={10}
       >
         <meshBasicMaterial
-          color={0x64dc96}
+          color={0x00afaa}
           transparent
           opacity={0}
           depthTest={false}
@@ -142,7 +142,7 @@ const Zone = ({ id, geometry, position }) => {
       <mesh ref={markerRef} renderOrder={20}>
         <planeGeometry args={[40, 40]} />
         <meshBasicMaterial
-          color={0x64dc96}
+          color={0xffcc33}
           alphaMap={getTexture("marker")}
           transparent
           depthTest={false}
