@@ -66,7 +66,7 @@ const ZoneSlider = () => {
         {zoneInfo.current.map((zone) => {
           return (
             <button
-              className={`slider-button cursor-pointer text-xl px-2 py-1 relative group ${zone.id == currentZone ? "text-green-500 font-bold scale-105" : "text-white"}`}
+              className={`slider-button cursor-pointer text-xl px-2 py-1 relative group ${zone.id == currentZone ? "text-amber-400 font-bold scale-105" : "text-white"}`}
               key={zone.name}
               onClick={() => {
                 onButtonClick(zone.id);
