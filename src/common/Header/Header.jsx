@@ -46,14 +46,14 @@ const Header = () => {
         {/* Links */}
         <ul className="flex items-center justify-end gap-6 text-2xl font-light">
           <li className="nav-item p-2 cursor-pointer">
-            <a href="/page-one">Gallery</a>
+            <a href="/page-one" className="hover:text-yellow-400">Gallery</a>
           </li>
 
           <li className="nav-item p-2 cursor-pointer">
-            <a href="/page-two">Investor Relation</a>
+            <a href="/page-two" className="hover:text-yellow-400">Investor Relation</a>
           </li>
           <li className="nav-item p-2 cursor-pointer">
-            <a href="/page-three">Project Overview</a>
+            <a href="/page-three" className="hover:text-yellow-400">Project Overview</a>
           </li>
         </ul>
       </nav>
