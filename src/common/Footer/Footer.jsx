@@ -34,7 +34,7 @@ const Footer = () => {
   }, [started]);
 
   return (
-    <footer className="absolute bottom-0 left-0 w-full z-50 pointer-events-none">
+    <footer className="absolute bottom-5 left-0 w-full z-50 pointer-events-none">
       <div className="container mx-auto flex items-center justify-between">
         {/* Copyright */}
         <div className="footer-item text-white opacity-80 text-xl pointer-events-auto">
