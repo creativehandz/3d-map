@@ -97,10 +97,11 @@ const LoadingScreen = () => {
             />
             <div className="absolute inset-0 bg-black opacity-10 pointer-events-none"></div>
           </div>
-          <div id="loading" className=" inset-0 z-[100] w-full" ref={container}>
-            <div className="grid grid-cols-1 gap-5 place-items-center w-full py-24 px-24">
-              <img src="./ibtec-logo-t.png" alt="Logo" className="w-52 h-auto mt-8" />
-              <p className="text-white text-6xl font-light text-center font">
+          <div id="loading" className="inset-0 z-[100] w-full" ref={container}>
+            <div className="w-full py-0 px-0">
+              <div className="absolute left-[43%]"><img src="./ibtec-logo-t.png" alt="Logo" className=" w-52 h-auto mt-[-100px]  right mx-auto mb-36" /></div>
+              
+              <p className="text-white text-6xl font-light text-center leading-[78px]">
                 Building Visions, Shaping The Future<br></br>
                 Innovating Tomorrow, Sustainably Today
               </p>
@@ -108,23 +109,10 @@ const LoadingScreen = () => {
 
             <div className="flex-1 flex items-center justify-center text-center"></div>
             <div className="absolute inset-0 bg-repeat z-10 pointer-events-none moving-cloud "></div>
-            <div
-              className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2"
-              ref={indicator}
-            >
-              <button
-                ref={button}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full text-white px-6 py-1 rounded-full text-6xl font-medium drop-shadow-lg pointer-events-none opacity-0 scale-0 cursor-pointer"
-                onClick={onEnter}
-              >
-                Enter
-              </button>
-
+            <div className="absolute bottom-44 left-0 right-0 flex flex-col items-center gap-y-8 z-50 py-2" ref={indicator}>
+              <button ref={button} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full text-black px-6 py-1 rounded-[8px] text-3xl drop-shadow-lg pointer-events-none opacity-0 scale-0 cursor-pointer bg-[#FFCC33]" onClick={onEnter}>Enter</button>
               <div className="h-6 border-2 shadow-xl container mx-auto bg-transparent relative opacity-0">
-                <div
-                  ref={line}
-                  className="absolute top-0 left-0 h-full origin-left w-full bg-white scale-x-0"
-                ></div>
+                <div ref={line} className="absolute top-0 left-0 h-full origin-left w-full bg-white scale-x-0"></div>
               </div>
             </div>
           </div>
