@@ -19,7 +19,7 @@ const PageOne = () => {
 
         <div className="absolute inset-0 -z-10">
           <img
-            src="Image20241123181536.png"
+            src="Image20241123192410.png"
             className="absolute top-0 left-0 w-full h-full object-cover"
           />
         </div>
