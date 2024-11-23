@@ -40,7 +40,7 @@ const Popup = () => {
     <div
       id="popup"
       ref={popupRef}
-      className="fixed inset-64 top-32 bottom-64 bg-green-50 rounded-2xl grid grid-cols-3 gap-4 p-4 shadow-xl scale-0 pointer-events-none z-50"
+      className="fixed inset-64 top-32 bottom-64 bg-[#ffffff] rounded-2xl grid grid-cols-3 gap-4 p-4 shadow-xl scale-0 pointer-events-none z-50"
     >
       {/* Image */}
       <div className="col-span-2 rounded-2xl overflow-hidden shadow-md">
@@ -50,13 +50,13 @@ const Popup = () => {
       {/* Text */}
       <div className="flex flex-col gap-4 justify-center px-4 relative">
         <h1
-          className="text-5xl font-bold tracking-tighter drop-shadow-md text-green-900"
+          className="text-5xl font-bold tracking-tighter drop-shadow-md text-[#000000]"
           ref={titleRef}
         >
           Zone Name
         </h1>
 
-        <p className="text-lg font-light drop-shadow-sm text-green-800">
+        <p className="text-lg font-light drop-shadow-sm text-[#000000]">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat at officiis,
           necessitatibus, aliquid vitae obcaecati beatae ullam non autem aut quibusdam unde
           commodi, delectus sit aperiam reprehenderit tenetur iure architecto!
@@ -64,13 +64,13 @@ const Popup = () => {
 
         <a
           href="#"
-          className="hover:scale-105 transition text-white text-lg bg-green-900 px-6 py-2 rounded-full w-fit"
+          className="hover:scale-105 transition text-white text-lg bg-[#ffcc33] px-6 py-2 rounded-[8px] w-fit"
         >
           More Info
         </a>
 
         <button
-          className="bg-red-200 px-4 py-1 rounded-full font-light text-gray-700 hover:scale-105 transition hover:bg-red-300 absolute bottom-4 right-4"
+          className="bg-red-200 px-4 py-1 rounded-[8px] font-light text-gray-700 hover:scale-105 transition hover:bg-red-300 absolute bottom-4 right-4"
           onClick={() => {
             setCurrentZone(-1);
             setShowPopup(false);
