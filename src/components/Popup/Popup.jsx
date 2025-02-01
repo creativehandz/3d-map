@@ -40,7 +40,7 @@ const Popup = () => {
     <div
       id="popup"
       ref={popupRef}
-      className="fixed inset-64 top-32 bottom-64 bg-[#ffffff] rounded-2xl grid grid-cols-3 gap-4 p-4 shadow-xl scale-0 pointer-events-none z-50"
+      className="fixed inset-6 lg:inset-64 lg:top-32 lg:bottom-64 bg-[#ffffff] rounded-2xl grid lg:grid-cols-3 gap-4 p-2 sm:p-4 shadow-xl scale-0 pointer-events-none z-50"
     >
       {/* Image */}
       <div className="col-span-2 rounded-2xl overflow-hidden shadow-md">
@@ -70,7 +70,7 @@ const Popup = () => {
         </a>
 
         <button
-          className="bg-red-200 px-4 py-1 rounded-[8px] font-light text-gray-700 hover:scale-105 transition hover:bg-red-300 absolute bottom-4 right-4"
+          className="bg-red-200 px-4 py-1 rounded-[8px] font-light text-gray-700 hover:scale-105 transition hover:bg-red-300 absolute bottom-2 right-2 sm:bottom-4 sm:right-4"
           onClick={() => {
             setCurrentZone(-1);
             setShowPopup(false);
