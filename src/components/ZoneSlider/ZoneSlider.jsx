@@ -1,8 +1,15 @@
 import { GlobalContext } from "src/contexts/GlobalContext.jsx";
-import { useContext, useEffect, useCallback, useRef } from "react";
+import { useContext, useEffect, useCallback, useRef, useState } from "react";
 import gsap from "gsap/all";
 
 const ZoneSlider = () => {
+  // const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  // useEffect(() => {
+  //   window.addEventListener("resize", () => {
+  //     setScreenWidth(window.innerWidth);
+  //   });
+  // }, []);
+
   const { zoneInfo, currentZone, setCurrentZone, started, animating, setShowPopup } =
     useContext(GlobalContext);
 
@@ -62,11 +69,13 @@ const ZoneSlider = () => {
 
   return (
     <div className="absolute bottom-20 container left-1/2 -translate-x-1/2" ref={sliderRef}>
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-center justify-between px-2">
         {zoneInfo.current.map((zone) => {
           return (
             <button
-              className={`slider-button cursor-pointer text-xl px-2 py-1 relative group ${zone.id == currentZone ? "text-amber-400 font-bold scale-105" : "text-white"}`}
+              className={`slider-button cursor-pointer text-[0.6rem] sm:!text-lg lg:!text-xl lg:px-2 py-1 relative group px-px min-h-[32px]
+                ${zone.id == currentZone ? "text-amber-400 text-[0.7rem] font-bold scale-105" : "text-white"}
+                `}
               key={zone.name}
               onClick={() => {
                 onButtonClick(zone.id);

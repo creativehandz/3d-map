@@ -46,7 +46,7 @@ const ResetButton = () => {
   return (
     <div className="container absolute bottom-2 left-1/2 -translate-x-1/2 h-16 pointer-events-none z-[100]">
       <button
-        className="reset-button rounded-[8px] absolute right-0 bottom-0 text-xl text-white cursor-pointer pointer-events-auto border drop-shadow-md px-4 py-2 h-fit hover:bg-white hover:bg-opacity-10"
+        className="reset-button rounded-[8px] absolute right-2 bottom-0 text-lg lg:text-xl text-white cursor-pointer pointer-events-auto border drop-shadow-md px-3 py-1 lg:px-4 lg:py-2 h-fit hover:bg-white hover:bg-opacity-10"
         onClick={onClick}
       >
         Reset

@@ -10,7 +10,7 @@ import PageThree from "./routes/PageThree/PageThree.jsx";
 
 const App = () => {
   return (
-    <div className="app min-h-screen relative">
+    <div className="app h-screen relative overflow-hidden">
       <GlobalProvider>
         <ModeProvider>
           <Header />
